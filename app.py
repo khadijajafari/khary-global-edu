@@ -7,7 +7,7 @@ import json
 from flask_mail import Mail, Message
 from werkzeug.security import generate_password_hash, check_password_hash
 from functools import wraps
-
+import time
 from datetime import datetime
 current_year = datetime.now().year
 
@@ -31,9 +31,14 @@ from email.mime.multipart import MIMEMultipart
 import os
 
 def get_db():
-    if 'PYTHONANYWHERE' in os.environ:
-        return sqlite3.connect('/home/kharyglobaledu/mysite/applications.db')
-    return sqlite3.connect('applications.db')
+    try:
+        conn = sqlite3.connect('applications.db', timeout=20)
+        conn.execute('PRAGMA journal_mode=WAL')
+        conn.row_factory = sqlite3.Row
+        return conn
+    except Exception as e:
+        print(f"Database error: {e}")
+        return None
 
 
 
@@ -11262,6 +11267,7 @@ def resources_page():
     return redirect('/blog')  # or create a proper resources page
 
 # Ensure /contact already exists, if not, add it.
+
 
 
 
