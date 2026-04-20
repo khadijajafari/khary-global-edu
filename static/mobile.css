@@ -1,0 +1,286 @@
+/* ========== KHARY GLOBAL EDU - UNIFIED MOBILE STYLES ========== */
+
+/* Force main menu colors */
+#khary-main-menu,
+#khary-main-menu .menu-btn,
+#khary-main-menu .menu-dropdown {
+    background: #1E3A8A !important;
+    color: white !important;
+}
+
+#khary-main-menu .menu-icon i {
+    color: #D4AF37 !important;
+}
+
+#khary-main-menu .dropdown-content a {
+    color: #1E3A8A !important;
+    background: white !important;
+}
+
+#khary-main-menu .dropdown-content a:hover {
+    background: #EFF6FF !important;
+}
+
+/* Desktop: normal horizontal menu */
+@media (min-width: 769px) {
+    .menu-dropdown {
+        display: inline-block !important;
+    }
+    .mobile-menu-icon {
+        display: none !important;
+    }
+    .mobile-side-menu {
+        display: none !important;
+    }
+}
+
+/* Mobile: hide horizontal menu, show 3-dots */
+@media (max-width: 768px) {
+    .menu-dropdown {
+        display: none !important;
+    }
+    
+    .mobile-menu-icon {
+        display: flex !important;
+        position: fixed;
+        top: 15px;
+        right: 15px;
+        z-index: 10000;
+        background: white;
+        width: 45px;
+        height: 45px;
+        border-radius: 50%;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        cursor: pointer;
+    }
+    
+    .mobile-menu-icon i {
+        font-size: 22px;
+        color: #1E3A8A;
+    }
+    
+    .mobile-side-menu {
+        position: fixed !important;
+        top: 0 !important;
+        right: -280px !important;
+        width: 280px !important;
+        height: 100% !important;
+        background: white !important;
+        z-index: 10001 !important;
+        transition: right 0.3s ease !important;
+        padding: 60px 20px !important;
+        box-shadow: -2px 0 10px rgba(0,0,0,0.1) !important;
+    }
+    
+    .mobile-side-menu.open {
+        right: 0 !important;
+    }
+    
+    .mobile-side-menu a {
+        display: block !important;
+        padding: 15px 0 !important;
+        color: #1E3A8A !important;
+        text-decoration: none !important;
+        border-bottom: 1px solid #eee !important;
+        font-size: 16px !important;
+    }
+    
+    .mobile-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0,0,0,0.5);
+        z-index: 10000;
+        display: none;
+    }
+    
+    .mobile-overlay.show {
+        display: block;
+    }
+    
+    /* Add padding for bottom menu if exists */
+    body {
+        padding-bottom: 70px;
+    }
+}
+
+/* Fix body padding */
+body {
+    margin: 0;
+    padding: 0;
+}
+
+/* Center all popups/modals on mobile */
+@media (max-width: 768px) {
+    .modal,
+    .reminder-popup,
+    .newsletter-popup,
+    .subscribe-popup,
+    #newsletterModal,
+    #reminderPopup,
+    #subscribe-popup,
+    .popup-container,
+    [class*="popup"],
+    [id*="Modal"],
+    [id*="Popup"] {
+        position: fixed !important;
+        top: 50% !important;
+        left: 50% !important;
+        transform: translate(-50%, -50%) !important;
+        width: 90% !important;
+        max-width: 350px !important;
+        margin: 0 !important;
+        right: auto !important;
+        bottom: auto !important;
+    }
+    
+    /* Modal content inside */
+    .modal-content,
+    .reminder-popup div,
+    .newsletter-popup div,
+    .subscribe-popup div {
+        width: 100% !important;
+        padding: 20px !important;
+        box-sizing: border-box !important;
+    }
+    
+    /* Fix any fixed positioned elements that might interfere */
+    .modal-backdrop,
+    .popup-overlay {
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        bottom: 0 !important;
+    }
+}
+
+/* Keep chat and WhatsApp at corners, not centered */
+@media (max-width: 768px) {
+    .fab-whatsapp,
+    #whatsappBtn,
+    .whatsapp-float {
+        position: fixed !important;
+        bottom: 20px !important;
+        right: 20px !important;
+        left: auto !important;
+        top: auto !important;
+        transform: none !important;
+    }
+    
+    #khary-ai-chat,
+    .ai-chat-btn {
+        position: fixed !important;
+        bottom: 90px !important;
+        right: 20px !important;
+        left: auto !important;
+        top: auto !important;
+        transform: none !important;
+    }
+}
+
+
+/* Make subscription button visible on mobile */
+@media (max-width: 768px) {
+    .subscribe-fixed-btn,
+    div[style*="position: fixed"][style*="bottom: 80px"] {
+        bottom: 20px !important;
+        left: 50% !important;
+        transform: translateX(-50%) !important;
+        right: auto !important;
+        width: auto !important;
+    }
+}
+
+.close-menu { display: block !important; }
+
+
+@media (max-width: 768px) {
+    #khary-chat-window {
+        width: 90% !important;
+        height: 70% !important;
+        max-height: 500px !important;
+    }
+}
+
+/* Fix both chatbots on homepage */
+body.home-page #khary-ai-chat {
+    bottom: 100px !important;
+    right: 20px !important;
+}
+
+body.home-page #khary-chat-window {
+    bottom: 170px !important;
+    right: 20px !important;
+}
+
+body.home-page #live-chat-widget {
+    bottom: 100px !important;
+    left: 20px !important;
+}
+
+/* Keep them separated - AI Chat on right, Live Chat on left */
+body.home-page #khary-chat-button {
+    bottom: 100px !important;
+    right: 20px !important;
+}
+
+body.home-page .live-chat-btn {
+    bottom: 100px !important;
+    left: 20px !important;
+}
+
+/* Mobile devices */
+@media (max-width: 768px) {
+    body.home-page #khary-ai-chat,
+    body.home-page #khary-chat-button {
+        bottom: 80px !important;
+        right: 15px !important;
+    }
+    
+    body.home-page #khary-chat-window {
+        bottom: 150px !important;
+        right: 15px !important;
+        width: 90% !important;
+        max-width: 340px !important;
+    }
+    
+    body.home-page #live-chat-widget,
+    body.home-page .live-chat-btn {
+        bottom: 80px !important;
+        left: 15px !important;
+    }
+}
+
+
+@media (max-width: 768px) {
+    #whatsappPopup {
+        width: 85% !important;
+        max-width: 280px !important;
+        left: 50% !important;
+        transform: translate(-50%, -50%) !important;
+    }
+}
+
+/* WhatsApp popup - centered on mobile */
+@media (max-width: 768px) {
+    #whatsapp-container {
+        top: 50% !important;
+        right: 15px !important;
+        transform: translateY(-50%) !important;
+    }
+    
+    #whatsapp-popup {
+        position: fixed !important;
+        top: 50% !important;
+        left: 50% !important;
+        right: auto !important;
+        transform: translate(-50%, -50%) !important;
+        width: 320px !important;
+        z-index: 10000 !important;
+    }
+}

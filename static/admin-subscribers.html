@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Subscribers - KHARY GLOBAL EDU</title>
+    <style>
+        body { font-family: Arial; background: #EFF6FF; padding: 20px; }
+        .container { max-width: 1200px; margin: 0 auto; background: white; padding: 20px; border-radius: 10px; }
+        h1 { color: #1E3A8A; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th { background: #1E3A8A; color: white; padding: 10px; }
+        td { padding: 10px; border-bottom: 1px solid #ddd; }
+        .btn { background: #D4AF37; color: #1E3A8A; padding: 10px 20px; text-decoration: none; border-radius: 5px; display: inline-block; margin: 10px; }
+        .export-btn { background: #10B981; color: white; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📧 Email Subscribers</h1>
+        <button class="btn export-btn" onclick="exportEmails()">📥 Export to CSV</button>
+        <button class="btn" onclick="location.reload()">🔄 Refresh</button>
+        <div id="subscribers-list"></div>
+        <a href="/khary-global-edu" class="btn">← Back to Admin</a>
+    </div>
+    <script>
+        function loadSubscribers() {
+            let subscribers = JSON.parse(localStorage.getItem('subscribers') || '[]');
+            let html = '<table><tr><th>Name</th><th>Email</th><th>Country</th><th>Date</th></tr>';
+            subscribers.forEach(sub => {
+                let date = new Date(sub.date).toLocaleDateString();
+                html += `<tr><td>${sub.name}</td><td>${sub.email}</td><td>${sub.country || 'All'}</td><td>${date}</td></tr>`;
+            });
+            html += '</table>';
+            if(subscribers.length === 0) html = '<p>No subscribers yet.</p>';
+            document.getElementById('subscribers-list').innerHTML = html;
+        }
+        
+        function exportEmails() {
+            let subscribers = JSON.parse(localStorage.getItem('subscribers') || '[]');
+            let csv = 'Name,Email,Country,Date\n';
+            subscribers.forEach(sub => {
+                csv += `"${sub.name}","${sub.email}","${sub.country || 'All'}","${sub.date}"\n`;
+            });
+            let blob = new Blob([csv], {type: 'text/csv'});
+            let url = URL.createObjectURL(blob);
+            let a = document.createElement('a');
+            a.href = url;
+            a.download = 'subscribers.csv';
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+        
+        loadSubscribers();
+    </script>
+</body>
+</html>

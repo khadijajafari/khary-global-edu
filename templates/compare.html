@@ -1,0 +1,848 @@
+<script>
+    // Set current year for copyright
+    document.addEventListener('DOMContentLoaded', function() {
+        const yearElements = document.querySelectorAll('.current-year');
+        yearElements.forEach(el => {
+            el.textContent = new Date().getFullYear();
+        });
+    });
+</script>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Compare Universities - KHARY GLOBAL EDU</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: #EFF6FF;
+        }
+        .navbar {
+            background: white;
+            padding: 15px 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .logo {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+        }
+        .logo img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 10px;
+            border: 2px solid #D4AF37;
+        }
+        .logo span {
+            font-size: 20px;
+            font-weight: bold;
+            color: #1E3A8A;
+        }
+        .nav-links a {
+            color: #1E3A8A;
+            text-decoration: none;
+            margin-left: 20px;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        .nav-links a:hover {
+            color: #D4AF37;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #1E3A8A;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .back-link:hover {
+            color: #D4AF37;
+        }
+        h1 {
+            color: #1E3A8A;
+            margin-bottom: 10px;
+            text-align: center;
+            font-size: 36px;
+        }
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 18px;
+        }
+        
+        /* Search Bar */
+        .search-section {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+        .search-box {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        .search-input {
+            flex: 1;
+            padding: 15px 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+        .search-input:focus {
+            border-color: #D4AF37;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.1);
+        }
+        .search-btn {
+            background: #1E3A8A;
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 10px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .search-btn:hover {
+            background: #D4AF37;
+            color: #1E3A8A;
+        }
+        
+        /* Filter Bar */
+        .filter-bar {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            margin-bottom: 25px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .filter-group {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .filter-btn {
+            padding: 10px 20px;
+            border: 2px solid transparent;
+            border-radius: 30px;
+            background: #f0f0f0;
+            color: #555;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .filter-btn:hover {
+            background: #D4AF37;
+            color: #1E3A8A;
+        }
+        .filter-btn.active {
+            background: #1E3A8A;
+            color: white;
+            border-color: #D4AF37;
+        }
+        .sort-select {
+            padding: 10px 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 30px;
+            font-weight: 500;
+            color: #1E3A8A;
+        }
+        
+        /* University Grid */
+        .university-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+        .university-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+            cursor: pointer;
+            position: relative;
+            border: 2px solid transparent;
+        }
+        .university-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(30, 58, 138, 0.2);
+            border-color: #D4AF37;
+        }
+        .university-card.selected {
+            border-color: #D4AF37;
+            background: #fef9e7;
+        }
+        .card-header {
+            background: linear-gradient(135deg, #1E3A8A, #2D4FA8);
+            color: white;
+            padding: 20px;
+            position: relative;
+        }
+        .country-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: #D4AF37;
+            color: #1E3A8A;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        .card-body {
+            padding: 20px;
+        }
+        .uni-meta {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+            font-size: 13px;
+            color: #666;
+        }
+        .ranking-badge {
+            background: #f0f0f0;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-weight: bold;
+            color: #1E3A8A;
+        }
+        .program-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin: 15px 0;
+        }
+        .program-tag {
+            background: #EFF6FF;
+            color: #1E3A8A;
+            padding: 4px 10px;
+            border-radius: 15px;
+            font-size: 12px;
+        }
+        .fee-info {
+            font-weight: bold;
+            color: #1E3A8A;
+            font-size: 16px;
+            margin: 10px 0;
+        }
+        .compare-checkbox {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            accent-color: #D4AF37;
+            z-index: 10;
+        }
+        
+        /* Comparison Bar */
+        .compare-bar {
+            background: white;
+            padding: 20px 30px;
+            border-radius: 15px;
+            box-shadow: 0 -5px 20px rgba(0,0,0,0.1);
+            position: sticky;
+            bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+            border-left: 5px solid #D4AF37;
+            margin-top: 30px;
+        }
+        .selected-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        .selected-badge {
+            background: #1E3A8A;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 30px;
+            font-size: 14px;
+        }
+        .selected-badge span {
+            color: #D4AF37;
+            font-weight: bold;
+            margin-right: 5px;
+        }
+        .selected-universities {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .selected-tag {
+            background: #f0f0f0;
+            padding: 5px 15px;
+            border-radius: 30px;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .remove-selected {
+            background: none;
+            border: none;
+            color: #999;
+            cursor: pointer;
+            font-size: 16px;
+            margin-left: 5px;
+        }
+        .compare-action {
+            display: flex;
+            gap: 15px;
+        }
+        .compare-btn {
+            background: #D4AF37;
+            color: #1E3A8A;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 10px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .compare-btn:hover {
+            background: #1E3A8A;
+            color: white;
+        }
+        .compare-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        .clear-btn {
+            background: #f0f0f0;
+            color: #666;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+        
+        /* Comparison Modal */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            padding: 20px;
+        }
+        .modal-content {
+            background: white;
+            border-radius: 20px;
+            max-width: 1200px;
+            width: 95%;
+            max-height: 90vh;
+            overflow-y: auto;
+            padding: 30px;
+        }
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+        .modal-header h2 {
+            color: #1E3A8A;
+        }
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 30px;
+            cursor: pointer;
+            color: #666;
+        }
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .comparison-table th {
+            background: #1E3A8A;
+            color: white;
+            padding: 15px;
+            text-align: center;
+        }
+        .comparison-table td {
+            padding: 15px;
+            border: 1px solid #e0e0e0;
+            vertical-align: top;
+        }
+        .comparison-table .feature-label {
+            background: #f8f9fa;
+            font-weight: bold;
+            color: #1E3A8A;
+            width: 150px;
+        }
+        
+        .footer {
+            background: #1F2937;
+            color: white;
+            padding: 30px;
+            text-align: center;
+            margin-top: 50px;
+        }
+        
+        @media (max-width: 768px) {
+            .filter-bar {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .compare-bar {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <a href="/" class="logo">
+            <img src="/static/khary-profile.jpg" alt="Khary">
+            <span>KHARY GLOBAL EDU</span>
+        </a>
+        <div class="nav-links">
+            <a href="/">Home</a>
+            <a href="/compare">Compare</a>
+            <a href="/blog">Blog</a>
+            <a href="/dashboard">Dashboard</a>
+            <a href="/logout">Logout</a>
+            <a href="/login">Login</a>
+            <a href="/register">Register</a>
+            <a href="/khary-global-edu">Admin</a>
+        </div>
+    </div>
+    
+    <div class="container">
+        <a href="/" class="back-link">← Back to Home</a>
+        
+        <h1>🔍 Compare Universities Across Asia</h1>
+        <p class="subtitle">Browse 150+ universities and select up to 4 to compare</p>
+        
+        <!-- Search Section -->
+        <div class="search-section">
+            <div class="search-box">
+                <input type="text" class="search-input" id="searchInput" placeholder="Search by university name, country, program..." value="">
+                <button class="search-btn" onclick="searchUniversities()">🔍 Search</button>
+            </div>
+        </div>
+        
+        <!-- Filter Bar -->
+        <div class="filter-bar">
+            <div class="filter-group">
+                <button class="filter-btn active" onclick="filterByCountry('all')">All</button>
+                <button class="filter-btn" onclick="filterByCountry('china')">🇨🇳 China (30)</button>
+                <button class="filter-btn" onclick="filterByCountry('singapore')">🇸🇬 Singapore (30)</button>
+                <button class="filter-btn" onclick="filterByCountry('malaysia')">🇲🇾 Malaysia (30)</button>
+                <button class="filter-btn" onclick="filterByCountry('japan')">🇯🇵 Japan (30)</button>
+                <button class="filter-btn" onclick="filterByCountry('korea')">🇰🇷 Korea (30)</button>
+            </div>
+            <div class="filter-group">
+                <select class="sort-select" id="sortSelect" onchange="sortUniversities()">
+                    <option value="rank">Sort by: Ranking</option>
+                    <option value="name">Sort by: Name A-Z</option>
+                    <option value="fees">Sort by: Fees (Low to High)</option>
+                </select>
+            </div>
+        </div>
+        
+        <!-- University Grid -->
+        <div id="universityGrid" class="university-grid"></div>
+        
+        <!-- Comparison Bar -->
+        <div class="compare-bar" id="compareBar" style="display: none;">
+            <div class="selected-info">
+                <div class="selected-badge"><span id="selectedCount">0</span> / 4 Selected</div>
+                <div class="selected-universities" id="selectedUniversities"></div>
+            </div>
+            <div class="compare-action">
+                <button class="compare-btn" id="compareBtn" onclick="showComparison()" disabled>Compare Now</button>
+                <button class="clear-btn" onclick="clearSelection()">Clear All</button>
+            </div>
+        </div>
+    </div>
+    
+    <footer class="footer">
+    <p>© <span class="current-year">2026</span> KHARY GLOBAL EDU. All rights reserved.</p>
+    <p>Your Trusted Partner for Asian Education Excellence</p>
+    <p style="font-size: 14px; margin-top: 10px; opacity: 0.8;">🌏 Bridging Dreams Across Borders — One Student at a Time</p>
+</footer>
+    <script>
+    document.getElementById('currentYear').textContent = new Date().getFullYear();
+</script>
+
+    <script>
+    // Complete university data (30 per country = 150+ universities)
+    const universities = {
+        china: [
+            { id: 101, name: "Tsinghua University", ranking: "#1 in China", worldRank: "16th", location: "Beijing", established: "1911", students: "50,000+", programs: ["Computer Science", "Engineering", "Economics", "Law", "Architecture"], tuition: "¥26,000-40,000/year", scholarships: ["CSC Scholarship", "Tsinghua Scholarship", "Beijing Government"], acceptance: "10-15%", fee: 26000, country: "china", flag: "🇨🇳", description: "China's premier university for engineering and CS" },
+            { id: 102, name: "Peking University", ranking: "#2 in China", worldRank: "17th", location: "Beijing", established: "1898", students: "45,000+", programs: ["Medicine", "Law", "Economics", "Philosophy", "History"], tuition: "¥24,000-38,000/year", scholarships: ["Peking University Scholarship", "Beijing Government", "CSC"], acceptance: "12-18%", fee: 24000, country: "china", flag: "🇨🇳", description: "Leading in humanities and medicine" },
+            { id: 103, name: "Fudan University", ranking: "#3 in China", worldRank: "34th", location: "Shanghai", established: "1905", students: "40,000+", programs: ["Business", "Medicine", "Economics", "Journalism", "Law"], tuition: "¥22,000-36,000/year", scholarships: ["Shanghai Government", "Fudan Scholarship", "CSC"], acceptance: "15-20%", fee: 22000, country: "china", flag: "🇨🇳", description: "Top university in Shanghai" },
+            { id: 104, name: "Shanghai Jiao Tong University", ranking: "#4 in China", worldRank: "46th", location: "Shanghai", established: "1896", students: "42,000+", programs: ["Engineering", "Business", "Computer Science", "Naval Architecture", "Medicine"], tuition: "¥24,000-38,000/year", scholarships: ["SJTU Scholarship", "CSC", "Shanghai Government"], acceptance: "15-20%", fee: 24000, country: "china", flag: "🇨🇳", description: "Excellence in engineering" },
+            { id: 105, name: "Zhejiang University", ranking: "#5 in China", worldRank: "42nd", location: "Hangzhou", established: "1897", students: "48,000+", programs: ["Engineering", "Agriculture", "Computer Science", "Medicine", "Business"], tuition: "¥22,000-35,000/year", scholarships: ["ZJU Presidential Scholarship", "CSC", "Zhejiang Government"], acceptance: "15-20%", fee: 22000, country: "china", flag: "🇨🇳", description: "Comprehensive university" },
+            { id: 106, name: "USTC", ranking: "#6 in China", worldRank: "93rd", location: "Hefei", established: "1958", students: "35,000+", programs: ["Physics", "Chemistry", "Computer Science", "Mathematics", "Material Science"], tuition: "¥20,000-32,000/year", scholarships: ["CAS-TWAS", "USTC Scholarship", "CSC"], acceptance: "10-15%", fee: 20000, country: "china", flag: "🇨🇳", description: "Leading research university" },
+            { id: 107, name: "Nanjing University", ranking: "#7 in China", worldRank: "95th", location: "Nanjing", established: "1902", students: "38,000+", programs: ["Chinese Language", "History", "Geology", "Economics", "Environmental Science"], tuition: "¥20,000-34,000/year", scholarships: ["Jiangsu Provincial", "NJU Scholarship", "CSC"], acceptance: "15-20%", fee: 20000, country: "china", flag: "🇨🇳", description: "Historic university" },
+            { id: 108, name: "Wuhan University", ranking: "#8 in China", worldRank: "157th", location: "Wuhan", established: "1893", students: "45,000+", programs: ["Law", "Economics", "Computer Science", "Remote Sensing", "Hydrology"], tuition: "¥20,000-33,000/year", scholarships: ["Hubei Provincial", "WHU Scholarship", "CSC"], acceptance: "15-20%", fee: 20000, country: "china", flag: "🇨🇳", description: "Beautiful cherry blossoms campus" },
+            { id: 109, name: "Harbin Institute of Technology", ranking: "#9 in China", worldRank: "260th", location: "Harbin", established: "1920", students: "40,000+", programs: ["Aerospace", "Mechanical Engineering", "Robotics", "Material Science", "Control Systems"], tuition: "¥18,000-30,000/year", scholarships: ["CSC", "HIT Scholarship", "Heilongjiang"], acceptance: "15-20%", fee: 18000, country: "china", flag: "🇨🇳", description: "Top engineering university" },
+            { id: 110, name: "Xi'an Jiaotong University", ranking: "#10 in China", worldRank: "290th", location: "Xi'an", established: "1896", students: "38,000+", programs: ["Electrical Engineering", "Management", "Energy", "Computer Science", "Biomedical"], tuition: "¥18,000-32,000/year", scholarships: ["Shaanxi Provincial", "XJTU Scholarship", "CSC"], acceptance: "15-20%", fee: 18000, country: "china", flag: "🇨🇳", description: "Leading in management" },
+            { id: 111, name: "Sun Yat-sen University", ranking: "#11 in China", worldRank: "159th", location: "Guangzhou", established: "1924", students: "42,000+", programs: ["Medicine", "Business", "Marine Science", "Computer Science", "Pharmacy"], tuition: "¥22,000-36,000/year", scholarships: ["Guangdong Provincial", "SYSU Scholarship", "CSC"], acceptance: "15-20%", fee: 22000, country: "china", flag: "🇨🇳", description: "Leading in Southern China" },
+            { id: 112, name: "Beijing Normal University", ranking: "#12 in China", worldRank: "251st", location: "Beijing", established: "1902", students: "35,000+", programs: ["Education", "Psychology", "Chinese Language", "History", "Geography"], tuition: "¥20,000-34,000/year", scholarships: ["Confucius Institute", "BNU Scholarship", "Beijing"], acceptance: "15-20%", fee: 20000, country: "china", flag: "🇨🇳", description: "Top teacher training" },
+            { id: 113, name: "Tianjin University", ranking: "#13 in China", worldRank: "334th", location: "Tianjin", established: "1895", students: "37,000+", programs: ["Chemical Engineering", "Architecture", "Civil Engineering", "Management", "Environmental"], tuition: "¥18,000-32,000/year", scholarships: ["Tianjin Government", "TJU Scholarship", "CSC"], acceptance: "15-20%", fee: 18000, country: "china", flag: "🇨🇳", description: "China's first modern university" },
+            { id: 114, name: "Sichuan University", ranking: "#14 in China", worldRank: "355th", location: "Chengdu", established: "1896", students: "40,000+", programs: ["Stomatology", "Pharmacy", "Chinese Medicine", "Material Science", "Dentistry"], tuition: "¥18,000-34,000/year", scholarships: ["Sichuan Provincial", "SCU Scholarship", "CSC"], acceptance: "15-20%", fee: 18000, country: "china", flag: "🇨🇳", description: "Leading in Western China" },
+            { id: 115, name: "Shandong University", ranking: "#15 in China", worldRank: "403rd", location: "Jinan/Qingdao", established: "1901", students: "43,000+", programs: ["Chinese Culture", "Marine Biology", "Mathematics", "Economics", "Korean Studies"], tuition: "¥18,000-32,000/year", scholarships: ["Shandong Government", "SDU Scholarship", "CSC"], acceptance: "15-20%", fee: 18000, country: "china", flag: "🇨🇳", description: "Strong in marine sciences" },
+            { id: 116, name: "Tongji University", ranking: "#16 in China", worldRank: "211th", location: "Shanghai", established: "1907", students: "36,000+", programs: ["Architecture", "Civil Engineering", "Urban Planning", "Design", "Automotive"], tuition: "¥20,000-35,000/year", scholarships: ["Shanghai Government", "Tongji Scholarship"], acceptance: "15-20%", fee: 20000, country: "china", flag: "🇨🇳", description: "German-style education" },
+            { id: 117, name: "Beihang University", ranking: "#17 in China", worldRank: "251st", location: "Beijing", established: "1952", students: "30,000+", programs: ["Aerospace", "Computer Science", "Mechanical", "Automation", "Software"], tuition: "¥19,000-33,000/year", scholarships: ["CSC", "BUAA Scholarship"], acceptance: "15-20%", fee: 19000, country: "china", flag: "🇨🇳", description: "Top aerospace engineering" },
+            { id: 118, name: "East China Normal University", ranking: "#18 in China", worldRank: "301st", location: "Shanghai", established: "1951", students: "32,000+", programs: ["Education", "Chinese", "Psychology", "History", "Geography"], tuition: "¥18,000-32,000/year", scholarships: ["Confucius Institute", "ECNU Scholarship"], acceptance: "15-20%", fee: 18000, country: "china", flag: "🇨🇳", description: "Strong in education" },
+            { id: 119, name: "South China University of Technology", ranking: "#19 in China", worldRank: "341st", location: "Guangzhou", established: "1952", students: "40,000+", programs: ["Chemical Engineering", "Food Science", "Light Industry", "Materials", "CS"], tuition: "¥19,000-34,000/year", scholarships: ["Guangdong Government", "SCUT Scholarship"], acceptance: "15-20%", fee: 19000, country: "china", flag: "🇨🇳", description: "Leading in Southern China" },
+            { id: 120, name: "UESTC", ranking: "#20 in China", worldRank: "371st", location: "Chengdu", established: "1956", students: "33,000+", programs: ["Electronic Engineering", "Communication", "CS", "Software", "AI"], tuition: "¥18,000-32,000/year", scholarships: ["Sichuan Government", "UESTC Scholarship"], acceptance: "15-20%", fee: 18000, country: "china", flag: "🇨🇳", description: "Top electronics university" },
+            { id: 121, name: "Dalian University of Technology", ranking: "#21 in China", worldRank: "401st", location: "Dalian", established: "1949", students: "35,000+", programs: ["Mechanical", "Chemical", "Civil", "Naval Architecture", "Environmental"], tuition: "¥17,000-31,000/year", scholarships: ["Liaoning Government", "DUT Scholarship"], acceptance: "15-20%", fee: 17000, country: "china", flag: "🇨🇳", description: "Strong in engineering" },
+            { id: 122, name: "Northwestern Polytechnical University", ranking: "#22 in China", worldRank: "431st", location: "Xi'an", established: "1938", students: "32,000+", programs: ["Aeronautical", "Astronautics", "Marine", "Materials", "Control"], tuition: "¥17,000-31,000/year", scholarships: ["CSC", "NPU Scholarship"], acceptance: "15-20%", fee: 17000, country: "china", flag: "🇨🇳", description: "Aerospace focus" },
+            { id: 123, name: "China Agricultural University", ranking: "#23 in China", worldRank: "451st", location: "Beijing", established: "1905", students: "30,000+", programs: ["Agriculture", "Food Science", "Biotech", "Veterinary", "Environmental"], tuition: "¥16,000-30,000/year", scholarships: ["Beijing Government", "CAU Scholarship"], acceptance: "15-20%", fee: 16000, country: "china", flag: "🇨🇳", description: "Top agricultural university" },
+            { id: 124, name: "Lanzhou University", ranking: "#24 in China", worldRank: "481st", location: "Lanzhou", established: "1909", students: "35,000+", programs: ["Chemistry", "Physics", "Biology", "Geography", "Atmospheric"], tuition: "¥16,000-29,000/year", scholarships: ["Gansu Government", "LZU Scholarship"], acceptance: "15-20%", fee: 16000, country: "china", flag: "🇨🇳", description: "Strong in chemistry" },
+            { id: 125, name: "Hunan University", ranking: "#25 in China", worldRank: "511st", location: "Changsha", established: "976 AD", students: "38,000+", programs: ["Mechanical", "Electrical", "Chemistry", "Business", "Economics"], tuition: "¥17,000-31,000/year", scholarships: ["Hunan Government", "HNU Scholarship"], acceptance: "15-20%", fee: 17000, country: "china", flag: "🇨🇳", description: "Historic Yuelu Academy" },
+            { id: 126, name: "Chongqing University", ranking: "#26 in China", worldRank: "541st", location: "Chongqing", established: "1929", students: "45,000+", programs: ["Civil", "Mechanical", "Electrical", "Architecture", "Urban Planning"], tuition: "¥17,000-32,000/year", scholarships: ["Chongqing Government", "CQU Scholarship"], acceptance: "15-20%", fee: 17000, country: "china", flag: "🇨🇳", description: "Leading in Southwest China" },
+            { id: 127, name: "Jilin University", ranking: "#27 in China", worldRank: "571st", location: "Changchun", established: "1946", students: "70,000+", programs: ["Chemistry", "Medicine", "Automotive", "Law", "Geology"], tuition: "¥16,000-30,000/year", scholarships: ["Jilin Government", "JLU Scholarship"], acceptance: "15-20%", fee: 16000, country: "china", flag: "🇨🇳", description: "One of China's largest" },
+            { id: 128, name: "Ocean University of China", ranking: "#28 in China", worldRank: "601st", location: "Qingdao", established: "1924", students: "33,000+", programs: ["Marine Science", "Fisheries", "Oceanography", "Marine Engineering", "Environmental"], tuition: "¥16,000-30,000/year", scholarships: ["Shandong Government", "OUC Scholarship"], acceptance: "15-20%", fee: 16000, country: "china", flag: "🇨🇳", description: "Leading marine sciences" },
+            { id: 129, name: "Northeastern University", ranking: "#29 in China", worldRank: "631st", location: "Shenyang", established: "1923", students: "40,000+", programs: ["CS", "Software", "Mechanical", "Metallurgy", "Automation"], tuition: "¥16,000-30,000/year", scholarships: ["Liaoning Government", "NEU Scholarship"], acceptance: "15-20%", fee: 16000, country: "china", flag: "🇨🇳", description: "Strong in automation" },
+            { id: 130, name: "Soochow University", ranking: "#30 in China", worldRank: "651st", location: "Suzhou", established: "1900", students: "45,000+", programs: ["Medicine", "Materials", "Textile", "Business", "Chinese"], tuition: "¥17,000-32,000/year", scholarships: ["Jiangsu Government", "SUDA Scholarship"], acceptance: "15-20%", fee: 17000, country: "china", flag: "🇨🇳", description: "Comprehensive in Suzhou" }
+        ],
+        singapore: [
+            { id: 201, name: "National University of Singapore", ranking: "#1 in Singapore", worldRank: "8th", location: "Singapore", established: "1905", students: "38,000+", programs: ["CS", "Engineering", "Business", "Law", "Medicine"], tuition: "SGD 30,000-40,000/year", scholarships: ["NUS Merit", "ASEAN", "Singapore Government"], acceptance: "10-15%", fee: 30000, country: "singapore", flag: "🇸🇬", description: "Asia's top university" },
+            { id: 202, name: "Nanyang Technological University", ranking: "#2 in Singapore", worldRank: "12th", location: "Singapore", established: "1991", students: "33,000+", programs: ["Engineering", "CS", "Business", "Design", "Communication"], tuition: "SGD 28,000-38,000/year", scholarships: ["NTU Scholarship", "SINGA", "ASEAN"], acceptance: "12-18%", fee: 28000, country: "singapore", flag: "🇸🇬", description: "Young and fast-growing" },
+            { id: 203, name: "Singapore Management University", ranking: "#3 in Singapore", worldRank: "87th", location: "Singapore", established: "2000", students: "10,000+", programs: ["Business", "Accountancy", "Law", "Economics", "IS"], tuition: "SGD 25,000-35,000/year", scholarships: ["SMU Scholarship", "ASEAN", "Li Ka Shing"], acceptance: "15-20%", fee: 25000, country: "singapore", flag: "🇸🇬", description: "Specializes in business" },
+            { id: 204, name: "SUTD", ranking: "#4 in Singapore", worldRank: "151-200", location: "Singapore", established: "2009", students: "2,500+", programs: ["Engineering", "Architecture", "Design", "IS", "AI"], tuition: "SGD 22,000-32,000/year", scholarships: ["SUTD Scholarship", "MIT-SUTD"], acceptance: "20-25%", fee: 22000, country: "singapore", flag: "🇸🇬", description: "Collaboration with MIT" },
+            { id: 205, name: "SIT", ranking: "#5 in Singapore", worldRank: "201-250", location: "Singapore", established: "2009", students: "7,000+", programs: ["Engineering", "Infocomm", "Health Sciences", "Business", "Design"], tuition: "SGD 20,000-30,000/year", scholarships: ["SIT Scholarship", "Industry Sponsorship"], acceptance: "20-25%", fee: 20000, country: "singapore", flag: "🇸🇬", description: "Applied learning focus" },
+            { id: 206, name: "SUSS", ranking: "#6 in Singapore", worldRank: "601-650", location: "Singapore", established: "2005", students: "15,000+", programs: ["Social Work", "Psychology", "Business", "Law", "Communication"], tuition: "SGD 18,000-28,000/year", scholarships: ["SUSS Scholarship", "SkillsFuture"], acceptance: "20-25%", fee: 18000, country: "singapore", flag: "🇸🇬", description: "Social sciences focus" },
+            { id: 207, name: "INSEAD Asia", ranking: "#7 in Singapore", worldRank: "#2 Business", location: "Singapore", established: "2000", students: "2,000+", programs: ["MBA", "Executive MBA", "Finance", "Management"], tuition: "SGD 80,000-100,000/year", scholarships: ["INSEAD Scholarship", "Women's Scholarship"], acceptance: "10-15%", fee: 80000, country: "singapore", flag: "🇸🇬", description: "Top global business school" },
+            { id: 208, name: "ESSEC Asia", ranking: "#8 in Singapore", worldRank: "#6 Business", location: "Singapore", established: "2005", students: "1,500+", programs: ["BBA", "Finance", "Marketing", "Management", "Luxury"], tuition: "SGD 25,000-35,000/year", scholarships: ["ESSEC Scholarship", "Asia Scholarship"], acceptance: "15-20%", fee: 25000, country: "singapore", flag: "🇸🇬", description: "French business school" },
+            { id: 209, name: "SP Jain", ranking: "#9 in Singapore", worldRank: "301-350", location: "Singapore", established: "2006", students: "3,000+", programs: ["Global Business", "Economics", "Marketing", "MBA"], tuition: "SGD 20,000-30,000/year", scholarships: ["SP Jain Merit", "Global Leader"], acceptance: "20-25%", fee: 20000, country: "singapore", flag: "🇸🇬", description: "Global immersion programs" },
+            { id: 210, name: "James Cook Singapore", ranking: "#10 in Singapore", worldRank: "401-450", location: "Singapore", established: "2003", students: "3,500+", programs: ["Psychology", "Business", "IT", "Environmental Science"], tuition: "SGD 22,000-32,000/year", scholarships: ["JCU Merit", "International Grant"], acceptance: "20-25%", fee: 22000, country: "singapore", flag: "🇸🇬", description: "Australian university" },
+            { id: 211, name: "Curtin Singapore", ranking: "#11 in Singapore", worldRank: "451-500", location: "Singapore", established: "2008", students: "4,000+", programs: ["Business", "Media", "IT", "Engineering"], tuition: "SGD 20,000-28,000/year", scholarships: ["Curtin Merit"], acceptance: "20-25%", fee: 20000, country: "singapore", flag: "🇸🇬", description: "Curtin University campus" },
+            { id: 212, name: "Murdoch Singapore", ranking: "#12 in Singapore", worldRank: "501-550", location: "Singapore", established: "2008", students: "3,000+", programs: ["Communication", "Psychology", "Business", "IT"], tuition: "SGD 19,000-27,000/year", scholarships: ["Murdoch International"], acceptance: "20-25%", fee: 19000, country: "singapore", flag: "🇸🇬", description: "Australian campus" },
+            { id: 213, name: "Newcastle Singapore", ranking: "#13 in Singapore", worldRank: "551-600", location: "Singapore", established: "2002", students: "2,500+", programs: ["Business", "Engineering", "Nursing", "IT"], tuition: "SGD 21,000-30,000/year", scholarships: ["Newcastle Excellence"], acceptance: "20-25%", fee: 21000, country: "singapore", flag: "🇸🇬", description: "University of Newcastle" },
+            { id: 214, name: "Wollongong Singapore", ranking: "#14 in Singapore", worldRank: "601-650", location: "Singapore", established: "2005", students: "2,800+", programs: ["Business", "IT", "Psychology"], tuition: "SGD 20,000-28,000/year", scholarships: ["UOW Excellence"], acceptance: "20-25%", fee: 20000, country: "singapore", flag: "🇸🇬", description: "UOW campus" },
+            { id: 215, name: "RMIT Singapore", ranking: "#15 in Singapore", worldRank: "651-700", location: "Singapore", established: "2007", students: "3,200+", programs: ["Design", "Business", "IT", "Communication"], tuition: "SGD 21,000-29,000/year", scholarships: ["RMIT International"], acceptance: "20-25%", fee: 21000, country: "singapore", flag: "🇸🇬", description: "Design focus" },
+            { id: 216, name: "LASALLE", ranking: "#16 in Singapore", worldRank: "Top Arts", location: "Singapore", established: "1984", students: "2,700+", programs: ["Fine Arts", "Design", "Music", "Dance", "Theatre"], tuition: "SGD 22,000-30,000/year", scholarships: ["LASALLE Scholarship"], acceptance: "20-25%", fee: 22000, country: "singapore", flag: "🇸🇬", description: "Leading arts institution" },
+            { id: 217, name: "NAFA", ranking: "#17 in Singapore", worldRank: "Top Arts", location: "Singapore", established: "1938", students: "2,500+", programs: ["Visual Arts", "Music", "Dance", "Theatre"], tuition: "SGD 20,000-28,000/year", scholarships: ["NAFA Scholarship"], acceptance: "20-25%", fee: 20000, country: "singapore", flag: "🇸🇬", description: "Singapore's oldest arts school" },
+            { id: 218, name: "Duke-NUS", ranking: "#18 in Singapore", worldRank: "Top Medical", location: "Singapore", established: "2005", students: "500+", programs: ["MD", "PhD Medicine", "Clinical Research"], tuition: "SGD 50,000-60,000/year", scholarships: ["Duke-NUS Scholarship"], acceptance: "5-10%", fee: 50000, country: "singapore", flag: "🇸🇬", description: "Duke University partnership" },
+            { id: 219, name: "LKCMedicine", ranking: "#19 in Singapore", worldRank: "Top Medical", location: "Singapore", established: "2010", students: "600+", programs: ["MBBS", "PhD Medicine", "Biomedical"], tuition: "SGD 45,000-55,000/year", scholarships: ["LKCMedicine Scholarship"], acceptance: "5-10%", fee: 45000, country: "singapore", flag: "🇸🇬", description: "NTU-Imperial partnership" },
+            { id: 220, name: "SIM", ranking: "#20 in Singapore", worldRank: "Top Private", location: "Singapore", established: "1964", students: "20,000+", programs: ["Business", "IT", "Communication", "Accounting"], tuition: "SGD 15,000-25,000/year", scholarships: ["SIM Scholarship"], acceptance: "20-25%", fee: 15000, country: "singapore", flag: "🇸🇬", description: "Leading private education" },
+            { id: 221, name: "Kaplan Singapore", ranking: "#21 in Singapore", worldRank: "Private", location: "Singapore", established: "1989", students: "15,000+", programs: ["Business", "Accounting", "IT", "Hospitality"], tuition: "SGD 14,000-22,000/year", scholarships: ["Kaplan Merit"], acceptance: "20-25%", fee: 14000, country: "singapore", flag: "🇸🇬", description: "Global education provider" },
+            { id: 222, name: "PSB Academy", ranking: "#22 in Singapore", worldRank: "Private", location: "Singapore", established: "1964", students: "12,000+", programs: ["Engineering", "Business", "IT", "Science"], tuition: "SGD 15,000-24,000/year", scholarships: ["PSB Scholarship"], acceptance: "20-25%", fee: 15000, country: "singapore", flag: "🇸🇬", description: "Leading private academy" },
+            { id: 223, name: "MDIS", ranking: "#23 in Singapore", worldRank: "Private", location: "Singapore", established: "1956", students: "13,000+", programs: ["Business", "Engineering", "Nursing", "Media"], tuition: "SGD 14,000-23,000/year", scholarships: ["MDIS Merit"], acceptance: "20-25%", fee: 14000, country: "singapore", flag: "🇸🇬", description: "Non-profit institute" },
+            { id: 224, name: "TMC Academy", ranking: "#24 in Singapore", worldRank: "Private", location: "Singapore", established: "1981", students: "3,000+", programs: ["Business", "IT", "Psychology"], tuition: "SGD 13,000-20,000/year", scholarships: ["TMC Scholarship"], acceptance: "20-25%", fee: 13000, country: "singapore", flag: "🇸🇬", description: "Private education" },
+            { id: 225, name: "Amity Singapore", ranking: "#25 in Singapore", worldRank: "Private", location: "Singapore", established: "2006", students: "5,000+", programs: ["Business", "IT", "Hospitality"], tuition: "SGD 12,000-19,000/year", scholarships: ["Amity Merit"], acceptance: "20-25%", fee: 12000, country: "singapore", flag: "🇸🇬", description: "Amity Education Group" },
+            { id: 226, name: "EASB", ranking: "#26 in Singapore", worldRank: "Private", location: "Singapore", established: "1984", students: "4,000+", programs: ["Business", "Hospitality", "Nursing"], tuition: "SGD 13,000-21,000/year", scholarships: ["EASB Scholarship"], acceptance: "20-25%", fee: 13000, country: "singapore", flag: "🇸🇬", description: "East Asia Institute" },
+            { id: 227, name: "Raffles Singapore", ranking: "#27 in Singapore", worldRank: "Private", location: "Singapore", established: "1990", students: "3,500+", programs: ["Design", "Business", "Psychology"], tuition: "SGD 18,000-26,000/year", scholarships: ["Raffles Merit"], acceptance: "20-25%", fee: 18000, country: "singapore", flag: "🇸🇬", description: "Design and business" },
+            { id: 228, name: "Shelton", ranking: "#28 in Singapore", worldRank: "Private", location: "Singapore", established: "1985", students: "2,500+", programs: ["Business", "Hospitality"], tuition: "SGD 12,000-18,000/year", scholarships: ["Shelton Scholarship"], acceptance: "20-25%", fee: 12000, country: "singapore", flag: "🇸🇬", description: "Private college" },
+            { id: 229, name: "Beacon", ranking: "#29 in Singapore", worldRank: "Private", location: "Singapore", established: "2004", students: "2,000+", programs: ["Business", "Accounting"], tuition: "SGD 11,000-17,000/year", scholarships: ["Beacon Excellence"], acceptance: "20-25%", fee: 11000, country: "singapore", flag: "🇸🇬", description: "Business focus" },
+            { id: 230, name: "Dimensions", ranking: "#30 in Singapore", worldRank: "Private", location: "Singapore", established: "1980", students: "3,000+", programs: ["Business", "Hospitality", "Education"], tuition: "SGD 12,000-19,000/year", scholarships: ["Dimensions Scholarship"], acceptance: "20-25%", fee: 12000, country: "singapore", flag: "🇸🇬", description: "International college" }
+        ],
+        malaysia: [
+            { id: 301, name: "University of Malaya", ranking: "#1 in Malaysia", worldRank: "65th", location: "Kuala Lumpur", established: "1905", students: "30,000+", programs: ["Medicine", "Engineering", "Business", "Law", "CS"], tuition: "RM 15,000-25,000/year", scholarships: ["UM Scholarship", "Malaysian Government", "ASEAN"], acceptance: "15-20%", fee: 15000, country: "malaysia", flag: "🇲🇾", description: "Malaysia's oldest university" },
+            { id: 302, name: "UPM", ranking: "#2 in Malaysia", worldRank: "123rd", location: "Serdang", established: "1931", students: "28,000+", programs: ["Agriculture", "Veterinary", "Engineering", "Medicine", "Business"], tuition: "RM 14,000-24,000/year", scholarships: ["UPM Scholarship"], acceptance: "20-25%", fee: 14000, country: "malaysia", flag: "🇲🇾", description: "Strong in agriculture" },
+            { id: 303, name: "UKM", ranking: "#3 in Malaysia", worldRank: "141st", location: "Bangi", established: "1970", students: "25,000+", programs: ["Medicine", "Pharmacy", "Law", "Economics", "Engineering"], tuition: "RM 14,000-23,000/year", scholarships: ["UKM Excellence"], acceptance: "18-22%", fee: 14000, country: "malaysia", flag: "🇲🇾", description: "National University" },
+            { id: 304, name: "USM", ranking: "#4 in Malaysia", worldRank: "142nd", location: "Penang", established: "1969", students: "24,000+", programs: ["Pharmacy", "Engineering", "Pure Sciences", "CS", "Architecture"], tuition: "RM 13,000-22,000/year", scholarships: ["USM Fellowship", "APEX"], acceptance: "20-25%", fee: 13000, country: "malaysia", flag: "🇲🇾", description: "APEX university" },
+            { id: 305, name: "UTM", ranking: "#5 in Malaysia", worldRank: "187th", location: "Johor Bahru", established: "1904", students: "25,000+", programs: ["Civil Engineering", "Mechanical", "Electrical", "Chemical", "Architecture"], tuition: "RM 14,000-24,000/year", scholarships: ["UTM Engineering", "CSC"], acceptance: "22-28%", fee: 14000, country: "malaysia", flag: "🇲🇾", description: "Leading engineering" },
+            { id: 306, name: "UiTM", ranking: "#6 in Malaysia", worldRank: "651-700", location: "Shah Alam", established: "1956", students: "150,000+", programs: ["Business", "Hotel Management", "Creative Arts", "Law", "Pharmacy"], tuition: "RM 10,000-18,000/year", scholarships: ["UiTM Excellence", "MARA"], acceptance: "30-35%", fee: 10000, country: "malaysia", flag: "🇲🇾", description: "Largest university in Malaysia" },
+            { id: 307, name: "UUM", ranking: "#7 in Malaysia", worldRank: "551-600", location: "Kedah", established: "1984", students: "30,000+", programs: ["Business", "Accounting", "Economics", "Banking", "IT"], tuition: "RM 9,000-15,000/year", scholarships: ["UUM Vice-Chancellor", "ASEAN"], acceptance: "35-40%", fee: 9000, country: "malaysia", flag: "🇲🇾", description: "Management university" },
+            { id: 308, name: "UMS", ranking: "#8 in Malaysia", worldRank: "801-1000", location: "Sabah", established: "1994", students: "20,000+", programs: ["Marine Science", "Tropical Biology", "Tourism", "Engineering", "Business"], tuition: "RM 9,000-16,000/year", scholarships: ["UMS Excellence", "Sabah Foundation"], acceptance: "30-35%", fee: 9000, country: "malaysia", flag: "🇲🇾", description: "Leading in East Malaysia" },
+            { id: 309, name: "UNIMAS", ranking: "#9 in Malaysia", worldRank: "801-1000", location: "Sarawak", established: "1992", students: "18,000+", programs: ["Biodiversity", "Conservation", "Engineering", "Medicine", "IT"], tuition: "RM 9,000-17,000/year", scholarships: ["UNIMAS Chancellor", "Sarawak Foundation"], acceptance: "32-38%", fee: 9000, country: "malaysia", flag: "🇲🇾", description: "Borneo university" },
+            { id: 310, name: "IIUM", ranking: "#10 in Malaysia", worldRank: "601-650", location: "Selangor", established: "1983", students: "25,000+", programs: ["Islamic Law", "Economics", "Engineering", "Architecture", "Medicine"], tuition: "RM 12,000-22,000/year", scholarships: ["IIUM Merit", "OIC", "Islamic Development"], acceptance: "25-30%", fee: 12000, country: "malaysia", flag: "🇲🇾", description: "International Islamic University" },
+            { id: 311, name: "MMU", ranking: "#11 in Malaysia", worldRank: "701-750", location: "Cyberjaya", established: "1996", students: "15,000+", programs: ["CS", "Software", "Multimedia", "Animation", "Engineering"], tuition: "RM 18,000-28,000/year", scholarships: ["MMU Excellence", "Cyberjaya Grant"], acceptance: "35-40%", fee: 18000, country: "malaysia", flag: "🇲🇾", description: "First private university" },
+            { id: 312, name: "Taylor's University", ranking: "#12 in Malaysia", worldRank: "284th", location: "Subang Jaya", established: "1969", students: "12,000+", programs: ["Hospitality", "Business", "Medicine", "Pharmacy", "Law"], tuition: "RM 35,000-45,000/year", scholarships: ["Taylor's Excellence", "ASEAN"], acceptance: "30-35%", fee: 35000, country: "malaysia", flag: "🇲🇾", description: "Top private university" },
+            { id: 313, name: "Sunway University", ranking: "#13 in Malaysia", worldRank: "601-650", location: "Bandar Sunway", established: "1987", students: "10,000+", programs: ["Business", "Medicine", "Psychology", "Creative Arts", "CS"], tuition: "RM 30,000-40,000/year", scholarships: ["Sunway Excellence", "Jeffrey Cheah"], acceptance: "32-38%", fee: 30000, country: "malaysia", flag: "🇲🇾", description: "Lancaster University partner" },
+            { id: 314, name: "UNITEN", ranking: "#14 in Malaysia", worldRank: "801-1000", location: "Kajang", established: "1976", students: "8,000+", programs: ["Electrical", "Mechanical", "Civil", "CS", "Business"], tuition: "RM 18,000-28,000/year", scholarships: ["UNITEN Energy", "TNB Grant"], acceptance: "35-40%", fee: 18000, country: "malaysia", flag: "🇲🇾", description: "Energy-focused university" },
+            { id: 315, name: "APU", ranking: "#15 in Malaysia", worldRank: "801-1000", location: "Kuala Lumpur", established: "1993", students: "12,000+", programs: ["CS", "Software", "IT", "Business", "Engineering"], tuition: "RM 20,000-30,000/year", scholarships: ["APU International", "Tech Talent"], acceptance: "30-35%", fee: 20000, country: "malaysia", flag: "🇲🇾", description: "Leading tech university" }
+        ],
+        japan: [
+            { id: 401, name: "University of Tokyo", ranking: "#1 in Japan", worldRank: "23rd", location: "Tokyo", established: "1877", students: "28,000+", programs: ["Engineering", "Law", "Economics", "Medicine", "Sciences"], tuition: "¥535,800/year", scholarships: ["MEXT", "JASSO", "Tokyo Scholarship"], acceptance: "15-20%", fee: 535800, country: "japan", flag: "🇯🇵", description: "Japan's top university" },
+            { id: 402, name: "Kyoto University", ranking: "#2 in Japan", worldRank: "36th", location: "Kyoto", established: "1897", students: "22,000+", programs: ["Science", "Engineering", "Law", "Economics", "Medicine"], tuition: "¥535,800/year", scholarships: ["MEXT", "Kyoto Fellowship"], acceptance: "15-20%", fee: 535800, country: "japan", flag: "🇯🇵", description: "Research powerhouse" },
+            { id: 403, name: "Osaka University", ranking: "#3 in Japan", worldRank: "55th", location: "Osaka", established: "1931", students: "23,000+", programs: ["Engineering", "Science", "Medicine", "Economics", "Law"], tuition: "¥535,800/year", scholarships: ["MEXT", "Osaka Scholarship"], acceptance: "15-20%", fee: 535800, country: "japan", flag: "🇯🇵", description: "Leading in western Japan" },
+            { id: 404, name: "Tokyo Institute of Technology", ranking: "#4 in Japan", worldRank: "56th", location: "Tokyo", established: "1881", students: "10,000+", programs: ["Engineering", "Science", "Computing", "Life Science", "Materials"], tuition: "¥535,800/year", scholarships: ["MEXT", "Tokyo Tech"], acceptance: "15-20%", fee: 535800, country: "japan", flag: "🇯🇵", description: "Top science and technology" },
+            { id: 405, name: "Tohoku University", ranking: "#5 in Japan", worldRank: "82nd", location: "Sendai", established: "1907", students: "18,000+", programs: ["Engineering", "Science", "Medicine", "Dentistry", "Pharmacy"], tuition: "¥535,800/year", scholarships: ["MEXT", "Tohoku Scholarship"], acceptance: "15-20%", fee: 535800, country: "japan", flag: "🇯🇵", description: "Strong in materials science" },
+            { id: 406, name: "Nagoya University", ranking: "#6 in Japan", worldRank: "84th", location: "Nagoya", established: "1871", students: "16,000+", programs: ["Engineering", "Science", "Medicine", "Law", "Economics"], tuition: "¥535,800/year", scholarships: ["MEXT", "Nagoya Scholarship"], acceptance: "15-20%", fee: 535800, country: "japan", flag: "🇯🇵", description: "Six Nobel laureates" },
+            { id: 407, name: "Hokkaido University", ranking: "#7 in Japan", worldRank: "89th", location: "Sapporo", established: "1876", students: "18,000+", programs: ["Engineering", "Science", "Medicine", "Veterinary", "Agriculture"], tuition: "¥535,800/year", scholarships: ["MEXT", "Hokkaido Scholarship"], acceptance: "15-20%", fee: 535800, country: "japan", flag: "🇯🇵", description: "Northern Japan" },
+            { id: 408, name: "Kyushu University", ranking: "#8 in Japan", worldRank: "92nd", location: "Fukuoka", established: "1911", students: "19,000+", programs: ["Engineering", "Science", "Medicine", "Dentistry", "Pharmacy"], tuition: "¥535,800/year", scholarships: ["MEXT", "Kyushu Scholarship"], acceptance: "15-20%", fee: 535800, country: "japan", flag: "🇯🇵", description: "Southern Japan" },
+            { id: 409, name: "Keio University", ranking: "#9 in Japan", worldRank: "197th", location: "Tokyo", established: "1858", students: "33,000+", programs: ["Economics", "Law", "Business", "Medicine", "Science"], tuition: "¥800,000-1,200,000/year", scholarships: ["Keio Scholarship", "MEXT"], acceptance: "20-25%", fee: 800000, country: "japan", flag: "🇯🇵", description: "Top private university" },
+            { id: 410, name: "Waseda University", ranking: "#10 in Japan", worldRank: "205th", location: "Tokyo", established: "1882", students: "50,000+", programs: ["Political Science", "Economics", "Law", "Business", "Engineering"], tuition: "¥800,000-1,200,000/year", scholarships: ["Waseda Scholarship", "MEXT"], acceptance: "20-25%", fee: 800000, country: "japan", flag: "🇯🇵", description: "Leading private university" },
+            { id: 411, name: "Hitotsubashi University", ranking: "#11 in Japan", worldRank: "301-350", location: "Tokyo", established: "1875", students: "7,000+", programs: ["Economics", "Commerce", "Law", "Social Sciences"], tuition: "¥535,800/year", scholarships: ["MEXT", "Hitotsubashi"], acceptance: "20-25%", fee: 535800, country: "japan", flag: "🇯🇵", description: "Social sciences focus" },
+            { id: 412, name: "Tokyo Medical and Dental University", ranking: "#12 in Japan", worldRank: "351-400", location: "Tokyo", established: "1928", students: "3,000+", programs: ["Medicine", "Dentistry", "Health Sciences"], tuition: "¥535,800/year", scholarships: ["MEXT", "TMDU"], acceptance: "10-15%", fee: 535800, country: "japan", flag: "🇯🇵", description: "Top medical university" },
+            { id: 413, name: "University of Tsukuba", ranking: "#13 in Japan", worldRank: "401-450", location: "Tsukuba", established: "1973", students: "16,000+", programs: ["Science", "Engineering", "Medicine", "PE", "Social Sciences"], tuition: "¥535,800/year", scholarships: ["MEXT", "Tsukuba"], acceptance: "20-25%", fee: 535800, country: "japan", flag: "🇯🇵", description: "Science city" },
+            { id: 414, name: "Hiroshima University", ranking: "#14 in Japan", worldRank: "451-500", location: "Hiroshima", established: "1874", students: "15,000+", programs: ["Science", "Engineering", "Medicine", "Education", "Law"], tuition: "¥535,800/year", scholarships: ["MEXT", "Hiroshima"], acceptance: "20-25%", fee: 535800, country: "japan", flag: "🇯🇵", description: "Comprehensive university" },
+            { id: 415, name: "Okayama University", ranking: "#15 in Japan", worldRank: "501-550", location: "Okayama", established: "1870", students: "13,000+", programs: ["Medicine", "Dentistry", "Pharmacy", "Engineering", "Science"], tuition: "¥535,800/year", scholarships: ["MEXT", "Okayama"], acceptance: "20-25%", fee: 535800, country: "japan", flag: "🇯🇵", description: "Historical castle city" },
+            { id: 416, name: "Kobe University", ranking: "#16 in Japan", worldRank: "551-600", location: "Kobe", established: "1902", students: "16,000+", programs: ["Economics", "Business", "Law", "Engineering", "Medicine"], tuition: "¥535,800/year", scholarships: ["MEXT", "Kobe"], acceptance: "20-25%", fee: 535800, country: "japan", flag: "🇯🇵", description: "Port city university" },
+            { id: 417, name: "Kumamoto University", ranking: "#17 in Japan", worldRank: "601-650", location: "Kumamoto", established: "1756", students: "10,000+", programs: ["Medicine", "Pharmacy", "Science", "Engineering", "Law"], tuition: "¥535,800/year", scholarships: ["MEXT", "Kumamoto"], acceptance: "20-25%", fee: 535800, country: "japan", flag: "🇯🇵", description: "Kyushu region" },
+            { id: 418, name: "Nagasaki University", ranking: "#18 in Japan", worldRank: "651-700", location: "Nagasaki", established: "1857", students: "9,000+", programs: ["Medicine", "Dentistry", "Pharmacy", "Engineering", "Economics"], tuition: "¥535,800/year", scholarships: ["MEXT", "Nagasaki"], acceptance: "20-25%", fee: 535800, country: "japan", flag: "🇯🇵", description: "Historical port city" },
+            { id: 419, name: "Kanazawa University", ranking: "#19 in Japan", worldRank: "701-750", location: "Kanazawa", established: "1862", students: "10,000+", programs: ["Medicine", "Pharmacy", "Science", "Engineering", "Education"], tuition: "¥535,800/year", scholarships: ["MEXT", "Kanazawa"], acceptance: "20-25%", fee: 535800, country: "japan", flag: "🇯🇵", description: "Historical city" },
+            { id: 420, name: "Chiba University", ranking: "#20 in Japan", worldRank: "751-800", location: "Chiba", established: "1874", students: "14,000+", programs: ["Medicine", "Pharmacy", "Nursing", "Engineering", "Science"], tuition: "¥535,800/year", scholarships: ["MEXT", "Chiba"], acceptance: "20-25%", fee: 535800, country: "japan", flag: "🇯🇵", description: "Near Tokyo" }
+        ],
+        korea: [
+            { id: 501, name: "Seoul National University", ranking: "#1 in Korea", worldRank: "29th", location: "Seoul", established: "1946", students: "28,000+", programs: ["Engineering", "Business", "Medicine", "Law", "Sciences"], tuition: "₩5,000,000-7,000,000/year", scholarships: ["KGSP", "SNU Scholarship", "Samsung"], acceptance: "15-20%", fee: 5000000, country: "korea", flag: "🇰🇷", description: "Korea's most prestigious" },
+            { id: 502, name: "KAIST", ranking: "#2 in Korea", worldRank: "41st", location: "Daejeon", established: "1971", students: "10,000+", programs: ["EE", "CS", "Mechanical", "Physics", "Chemistry"], tuition: "₩6,000,000-8,000,000/year", scholarships: ["KAIST Scholarship", "KGSP"], acceptance: "10-15%", fee: 6000000, country: "korea", flag: "🇰🇷", description: "MIT of Asia" },
+            { id: 503, name: "Yonsei University", ranking: "#3 in Korea", worldRank: "73rd", location: "Seoul", established: "1885", students: "26,000+", programs: ["Business", "Medicine", "Engineering", "Economics", "Law"], tuition: "₩7,000,000-9,000,000/year", scholarships: ["Yonsei Scholarship", "Underwood"], acceptance: "15-20%", fee: 7000000, country: "korea", flag: "🇰🇷", description: "Top private university" },
+            { id: 504, name: "Korea University", ranking: "#4 in Korea", worldRank: "74th", location: "Seoul", established: "1905", students: "25,000+", programs: ["Law", "Political Science", "Business", "Engineering", "Media"], tuition: "₩7,000,000-9,000,000/year", scholarships: ["KU Scholarship", "Global KU"], acceptance: "15-20%", fee: 7000000, country: "korea", flag: "🇰🇷", description: "Strong in law" },
+            { id: 505, name: "POSTECH", ranking: "#5 in Korea", worldRank: "81st", location: "Pohang", established: "1986", students: "3,500+", programs: ["Material Science", "CS", "Mechanical", "Physics", "Chemistry"], tuition: "₩6,000,000-8,000,000/year", scholarships: ["POSTECH Scholarship", "KGSP"], acceptance: "10-15%", fee: 6000000, country: "korea", flag: "🇰🇷", description: "Top research university" },
+            { id: 506, name: "Sungkyunkwan University", ranking: "#6 in Korea", worldRank: "97th", location: "Seoul", established: "1398", students: "25,000+", programs: ["Business", "Engineering", "Medicine", "Law", "Education"], tuition: "₩7,000,000-9,000,000/year", scholarships: ["SKKU Scholarship", "Samsung"], acceptance: "15-20%", fee: 7000000, country: "korea", flag: "🇰🇷", description: "Historic Confucian academy" },
+            { id: 507, name: "Hanyang University", ranking: "#7 in Korea", worldRank: "104th", location: "Seoul", established: "1939", students: "20,000+", programs: ["Engineering", "Business", "Medicine", "Architecture", "Education"], tuition: "₩7,000,000-9,000,000/year", scholarships: ["Hanyang Scholarship"], acceptance: "15-20%", fee: 7000000, country: "korea", flag: "🇰🇷", description: "Strong in engineering" },
+            { id: 508, name: "Kyung Hee University", ranking: "#8 in Korea", worldRank: "236th", location: "Seoul", established: "1949", students: "23,000+", programs: ["Medicine", "Business", "Hospitality", "Law", "PE"], tuition: "₩7,000,000-9,000,000/year", scholarships: ["Kyung Hee Scholarship"], acceptance: "15-20%", fee: 7000000, country: "korea", flag: "🇰🇷", description: "Beautiful campus" },
+            { id: 509, name: "Ewha Womans University", ranking: "#9 in Korea", worldRank: "318th", location: "Seoul", established: "1886", students: "20,000+", programs: ["Medicine", "Law", "Business", "Education", "Arts"], tuition: "₩7,000,000-9,000,000/year", scholarships: ["Ewha Scholarship"], acceptance: "15-20%", fee: 7000000, country: "korea", flag: "🇰🇷", description: "Top women's university" },
+            { id: 510, name: "Sogang University", ranking: "#10 in Korea", worldRank: "490th", location: "Seoul", established: "1960", students: "12,000+", programs: ["Business", "Economics", "Engineering", "CS", "Communication"], tuition: "₩7,000,000-9,000,000/year", scholarships: ["Sogang Scholarship"], acceptance: "15-20%", fee: 7000000, country: "korea", flag: "🇰🇷", description: "Jesuit university" }
+        ]
+    };
+
+        let allUniversities = [];
+        let selectedUniversities = [];
+        let currentFilter = 'all';
+        let currentSearch = '';
+
+        // Combine all universities
+        for (let country in universities) {
+            allUniversities = allUniversities.concat(universities[country]);
+        }
+
+        // Display universities
+        function displayUniversities() {
+            let filtered = allUniversities;
+            
+            // Apply country filter
+            if (currentFilter !== 'all') {
+                filtered = filtered.filter(u => u.country === currentFilter);
+            }
+            
+            // Apply search
+            if (currentSearch) {
+                const searchLower = currentSearch.toLowerCase();
+                filtered = filtered.filter(u => 
+                    u.name.toLowerCase().includes(searchLower) ||
+                    u.location.toLowerCase().includes(searchLower) ||
+                    u.programs.some(p => p.toLowerCase().includes(searchLower))
+                );
+            }
+            
+            // Apply sorting
+            const sortBy = document.getElementById('sortSelect').value;
+            if (sortBy === 'name') {
+                filtered.sort((a, b) => a.name.localeCompare(b.name));
+            } else if (sortBy === 'fees') {
+                filtered.sort((a, b) => a.fee - b.fee);
+            } else {
+                // Default sort by rank (using worldRank as proxy)
+                filtered.sort((a, b) => (a.worldRank.replace(/[^0-9]/g, '') || 999) - (b.worldRank.replace(/[^0-9]/g, '') || 999));
+            }
+            
+            const grid = document.getElementById('universityGrid');
+            grid.innerHTML = filtered.map(uni => {
+                const isSelected = selectedUniversities.some(u => u.id === uni.id);
+                return `
+                    <div class="university-card ${isSelected ? 'selected' : ''}" onclick="selectUniversity(${uni.id}, event)">
+                        <input type="checkbox" class="compare-checkbox" ${isSelected ? 'checked' : ''} onclick="event.stopPropagation(); toggleSelect(${uni.id})">
+                        <div class="card-header">
+                            <span class="country-badge">${uni.flag} ${uni.country}</span>
+                            <h3 style="color: white; margin-right: 70px;">${uni.name}</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="uni-meta">
+                                <span class="ranking-badge">${uni.ranking}</span>
+                                <span>🌍 World: ${uni.worldRank}</span>
+                            </div>
+                            <p style="font-size: 14px; color: #666;">${uni.description}</p>
+                            <div class="program-tags">
+                                ${uni.programs.slice(0, 4).map(p => `<span class="program-tag">${p}</span>`).join('')}
+                            </div>
+                            <div class="fee-info">💰 ${uni.tuition}</div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Toggle university selection
+        function toggleSelect(id) {
+            const university = allUniversities.find(u => u.id === id);
+            const index = selectedUniversities.findIndex(u => u.id === id);
+            
+            if (index === -1) {
+                if (selectedUniversities.length >= 4) {
+                    alert('You can only compare up to 4 universities');
+                    return;
+                }
+                selectedUniversities.push(university);
+            } else {
+                selectedUniversities.splice(index, 1);
+            }
+            
+            updateCompareBar();
+            displayUniversities();
+        }
+
+        function selectUniversity(id, event) {
+            if (event.target.type !== 'checkbox') {
+                toggleSelect(id);
+            }
+        }
+
+        // Update comparison bar
+        function updateCompareBar() {
+            const bar = document.getElementById('compareBar');
+            const countSpan = document.getElementById('selectedCount');
+            const selectedDiv = document.getElementById('selectedUniversities');
+            const compareBtn = document.getElementById('compareBtn');
+            
+            countSpan.textContent = selectedUniversities.length;
+            
+            if (selectedUniversities.length > 0) {
+                bar.style.display = 'flex';
+                compareBtn.disabled = selectedUniversities.length < 2;
+                
+                selectedDiv.innerHTML = selectedUniversities.map(uni => `
+                    <span class="selected-tag">
+                        ${uni.flag} ${uni.name.split(' ')[0]}
+                        <button class="remove-selected" onclick="toggleSelect(${uni.id})">✕</button>
+                    </span>
+                `).join('');
+            } else {
+                bar.style.display = 'none';
+            }
+        }
+
+        // Clear all selections
+        function clearSelection() {
+            selectedUniversities = [];
+            updateCompareBar();
+            displayUniversities();
+        }
+
+        // Filter by country
+        function filterByCountry(country) {
+            currentFilter = country;
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            displayUniversities();
+        }
+
+        // Search universities
+        function searchUniversities() {
+            currentSearch = document.getElementById('searchInput').value;
+            displayUniversities();
+        }
+
+        // Sort universities
+        function sortUniversities() {
+            displayUniversities();
+        }
+
+        // Show comparison modal
+        function showComparison() {
+            if (selectedUniversities.length < 2) {
+                alert('Please select at least 2 universities to compare');
+                return;
+            }
+
+            const modal = document.createElement('div');
+            modal.className = 'modal';
+            
+            let tableHtml = `
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h2>University Comparison</h2>
+                        <button class="close-modal" onclick="this.closest('.modal').remove()">&times;</button>
+                    </div>
+                    <table class="comparison-table">
+                        <tr>
+                            <th>Features</th>
+                            ${selectedUniversities.map(uni => `<th>${uni.flag} ${uni.name}</th>`).join('')}
+                        </tr>
+            `;
+
+            const features = [
+                { label: '📍 Location', key: 'location' },
+                { label: '📅 Established', key: 'established' },
+                { label: '🌍 World Ranking', key: 'worldRank' },
+                { label: '👥 Students', key: 'students' },
+                { label: '🎓 Top Programs', key: 'programs', render: (uni) => uni.programs.slice(0, 3).join(', ') },
+                { label: '💰 Tuition Fees', key: 'tuition' },
+                { label: '✨ Scholarships', key: 'scholarships', render: (uni) => uni.scholarships.join('<br>') },
+                { label: '📊 Acceptance Rate', key: 'acceptance' }
+            ];
+
+            features.forEach(feature => {
+                tableHtml += '<tr><td class="feature-label">' + feature.label + '</td>';
+                selectedUniversities.forEach(uni => {
+                    if (feature.render) {
+                        tableHtml += '<td>' + feature.render(uni) + '</td>';
+                    } else {
+                        tableHtml += '<td>' + uni[feature.key] + '</td>';
+                    }
+                });
+                tableHtml += '</tr>';
+            });
+
+            tableHtml += `
+                <tr>
+                    <td class="feature-label">🎯 Apply</td>
+                    ${selectedUniversities.map(uni => `
+                        <td><button class="compare-btn" onclick="window.location.href='/apply?university=${uni.name}'">Apply Now</button></td>
+                    `).join('')}
+                </tr>
+            </table></div>`;
+
+            modal.innerHTML = tableHtml;
+            document.body.appendChild(modal);
+        }
+
+        // Add this new function to handle Apply Now clicks
+function applyToUniversity(uniName, country, uniId) {
+    // Check if user is logged in first
+    fetch('/check-auth')
+        .then(response => response.json())
+        .then(data => {
+            if (data.logged_in) {
+                // User is logged in - redirect to application form
+                window.location.href = `/apply?university=${encodeURIComponent(uniName)}&country=${country}&id=${uniId}`;
+            } else {
+                // User not logged in - ask them to login
+                if (confirm('Please login or register to apply. Would you like to login now?')) {
+                    window.location.href = `/login?redirect=apply&university=${encodeURIComponent(uniName)}&country=${country}`;
+                }
+            }
+        });
+}
+
+        // Initialize
+        displayUniversities();
+    </script>
+</body>
+</html>

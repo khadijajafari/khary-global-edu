@@ -1,0 +1,909 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>CSCA Exam - KHARY GLOBAL EDU</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: #EFF6FF;
+        }
+        .navbar {
+            background: white;
+            padding: 15px 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .logo {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+        }
+        .logo img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 10px;
+            border: 2px solid #D4AF37;
+        }
+        .logo span {
+            font-size: 20px;
+            font-weight: bold;
+            color: #1E3A8A;
+        }
+        .nav-links a {
+            color: #1E3A8A;
+            text-decoration: none;
+            margin-left: 20px;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        .nav-links a:hover {
+            color: #D4AF37;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #1E3A8A;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .back-link:hover {
+            color: #D4AF37;
+        }
+        h1 {
+            color: #1E3A8A;
+            margin-bottom: 10px;
+            font-size: 36px;
+        }
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 18px;
+        }
+        
+        /* Hero Section */
+        .hero-section {
+            background: linear-gradient(135deg, #1E3A8A, #2D4FA8);
+            color: white;
+            padding: 40px;
+            border-radius: 20px;
+            margin-bottom: 40px;
+            text-align: center;
+        }
+        .hero-section h2 {
+            font-size: 28px;
+            margin-bottom: 15px;
+        }
+        .hero-section p {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+        
+        /* Stats Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+        .stat-card {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+        .stat-number {
+            font-size: 32px;
+            font-weight: bold;
+            color: #D4AF37;
+        }
+        .stat-label {
+            color: #1E3A8A;
+            font-weight: bold;
+            margin-top: 5px;
+            font-size: 14px;
+        }
+        
+        /* Section Titles */
+        .section-title {
+            color: #1E3A8A;
+            font-size: 24px;
+            margin: 30px 0 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #D4AF37;
+            display: inline-block;
+        }
+        
+        /* Exam Structure Table */
+        .exam-table {
+            width: 100%;
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+        .exam-table th {
+            background: #1E3A8A;
+            color: white;
+            padding: 15px;
+            text-align: left;
+        }
+        .exam-table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #eee;
+        }
+        .exam-table tr:hover {
+            background: #EFF6FF;
+        }
+        
+        /* Filter Bar */
+        .filter-bar {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            margin-bottom: 25px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .filter-group {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .filter-btn {
+            padding: 8px 20px;
+            border: 2px solid transparent;
+            border-radius: 30px;
+            background: #f0f0f0;
+            color: #555;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .filter-btn:hover {
+            background: #D4AF37;
+            color: #1E3A8A;
+        }
+        .filter-btn.active {
+            background: #1E3A8A;
+            color: white;
+            border-color: #D4AF37;
+        }
+        .search-input {
+            padding: 8px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 30px;
+            width: 250px;
+            font-size: 14px;
+        }
+        .search-input:focus {
+            border-color: #D4AF37;
+            outline: none;
+        }
+        
+        /* University Grid */
+        .uni-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        .uni-card {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+            border-left: 5px solid #D4AF37;
+        }
+        .uni-card:hover {
+            transform: translateY(-5px);
+        }
+        .uni-name {
+            font-weight: bold;
+            color: #1E3A8A;
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+        .uni-requirements {
+            background: #EFF6FF;
+            padding: 8px;
+            border-radius: 8px;
+            margin: 10px 0;
+            font-size: 13px;
+        }
+        .uni-city {
+            color: #666;
+            font-size: 12px;
+            margin-top: 5px;
+        }
+        .uni-type {
+            display: inline-block;
+            background: #D4AF37;
+            color: #1E3A8A;
+            padding: 3px 10px;
+            border-radius: 15px;
+            font-size: 11px;
+            font-weight: bold;
+            margin-top: 8px;
+        }
+        
+        /* Tips Grid */
+        .tips-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        .tip-card {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .tip-icon {
+            font-size: 30px;
+        }
+        .tip-text {
+            color: #333;
+            font-size: 14px;
+        }
+        
+        /* Documents List */
+        .documents-list {
+            background: white;
+            padding: 20px 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            margin: 20px 0;
+        }
+        .documents-list li {
+            padding: 8px 0;
+            color: #555;
+            list-style-type: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .documents-list li:before {
+            content: "✓";
+            color: #D4AF37;
+            font-weight: bold;
+        }
+        
+        .footer {
+            background: #1F2937;
+            color: white;
+            padding: 30px;
+            text-align: center;
+            margin-top: 50px;
+        }
+        
+        .pagination {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+        .page-btn {
+            background: white;
+            border: 1px solid #1E3A8A;
+            padding: 8px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .page-btn:hover, .page-btn.active {
+            background: #1E3A8A;
+            color: white;
+        }
+        
+        /* Modal Styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+        .modal-container {
+            background: white;
+            border-radius: 20px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            padding: 30px;
+            position: relative;
+        }
+        .modal-container h2 {
+            color: #1E3A8A;
+            margin-bottom: 20px;
+        }
+        .modal-container input,
+        .modal-container select,
+        .modal-container textarea {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+        }
+        .modal-container label {
+            font-weight: bold;
+            color: #1E3A8A;
+            display: block;
+        }
+        .modal-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        .modal-buttons button {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .submit-btn {
+            background: #1E3A8A;
+            color: white;
+        }
+        .submit-btn:hover {
+            background: #D4AF37;
+            color: #1E3A8A;
+        }
+        .close-btn {
+            background: #ccc;
+            color: black;
+        }
+        .close-btn:hover {
+            background: #999;
+        }
+        
+        @media (max-width: 768px) {
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .filter-bar {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .search-input {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <a href="/" class="logo">
+            <img src="/static/khary-profile.jpg" alt="Khary">
+            <span>KHARY GLOBAL EDU</span>
+        </a>
+        <div class="nav-links">
+            <a href="/">Home</a>
+            <a href="/compare">Compare</a>
+            <a href="/blog">Blog</a>
+            <a href="/foundation">Foundation</a>
+            <a href="/csca">CSCA Exam</a>
+        </div>
+    </div>
+    
+    <div class="container">
+        <a href="/" class="back-link">← Back to Home</a>
+        
+        <h1>📝 CSCA Exam Guide</h1>
+        <p class="subtitle">China Scholastic Competency Assessment - Standardized Entrance Exam for Chinese Universities</p>
+        
+        <!-- Hero Section -->
+        <div class="hero-section">
+            <h2>🎯 What is CSCA?</h2>
+            <p>The China Scholastic Competency Assessment (CSCA) is a standardized entrance examination organized by the China Scholarship Council (CSC) for international students applying to undergraduate programs at Chinese universities.</p>
+        </div>
+        
+        <!-- Stats Cards -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-number">5x/Year</div>
+                <div class="stat-label">Exam Sessions</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">5</div>
+                <div class="stat-label">Subjects</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">¥450-700</div>
+                <div class="stat-label">Exam Fee</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">100+</div>
+                <div class="stat-label">Universities</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">Chinese/English</div>
+                <div class="stat-label">Test Language</div>
+            </div>
+        </div>
+        
+        <!-- Exam Structure -->
+        <h2 class="section-title">📚 Exam Structure</h2>
+        <table class="exam-table">
+            <thead>
+                <tr>
+                    <th>Subject</th>
+                    <th>Score</th>
+                    <th>Duration</th>
+                    <th>Questions</th>
+                    <th>Language</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Professional Chinese</td>
+                    <td>0-100</td>
+                    <td>90 min</td>
+                    <td>80 objective</td>
+                    <td>Chinese only</td>
+                </tr>
+                <tr style="background:#f8f9fa;">
+                    <td>Mathematics</td>
+                    <td>0-100</td>
+                    <td>60 min</td>
+                    <td>48 objective</td>
+                    <td>Chinese/English</td>
+                </tr>
+                <tr>
+                    <td>Physics</td>
+                    <td>0-100</td>
+                    <td>60 min</td>
+                    <td>48 objective</td>
+                    <td>Chinese/English</td>
+                </tr>
+                <tr style="background:#f8f9fa;">
+                    <td>Chemistry</td>
+                    <td>0-100</td>
+                    <td>60 min</td>
+                    <td>48 objective</td>
+                    <td>Chinese/English</td>
+                </tr>
+                <tr>
+                    <td>Biology</td>
+                    <td>0-100</td>
+                    <td>60 min</td>
+                    <td>48 objective</td>
+                    <td>Chinese/English</td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <div style="background: #FFF3E0; padding: 15px; border-radius: 10px; margin: 20px 0; border-left: 4px solid #FF9800;">
+            <p><strong>⚠️ Important:</strong> Mathematics is <strong>MANDATORY</strong> for ALL applicants. Other subjects depend on your chosen major.</p>
+        </div>
+        
+        <!-- Exam Sessions -->
+        <h2 class="section-title">📅 Exam Sessions (2026)</h2>
+        <table class="exam-table">
+            <thead>
+                <tr>
+                    <th>Session</th>
+                    <th>Month</th>
+                    <th>Registration Period</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td>Spring</td><td>March</td><td>Check CSCA website</td></tr>
+                <tr style="background:#f8f9fa;"><td>Spring</td><td>April</td><td>April 1-9</td></tr>
+                <tr><td>Summer</td><td>June</td><td>Check CSCA website</td></tr>
+                <tr style="background:#f8f9fa;"><td>Winter</td><td>January</td><td>Check CSCA website</td></tr>
+                <tr><td>Winter</td><td>December</td><td>Check CSCA website</td></tr>
+            </tbody>
+        </table>
+        
+        <!-- Fee -->
+        <h2 class="section-title">💰 Examination Fee</h2>
+        <div style="background: white; padding: 20px; border-radius: 15px; margin: 20px 0; text-align: center;">
+            <p style="font-size: 18px;"><strong>1 Subject:</strong> ¥450 &nbsp;&nbsp;|&nbsp;&nbsp; <strong>2 or more Subjects:</strong> ¥700</p>
+        </div>
+        
+        <!-- Universities Accepting CSCA -->
+        <h2 class="section-title">🏛️ Universities Accepting CSCA (100+)</h2>
+        
+        <!-- Filter Bar -->
+        <div class="filter-bar">
+            <div class="filter-group">
+                <button class="filter-btn active" onclick="filterUni('all')">All</button>
+                <button class="filter-btn" onclick="filterUni('C9 League')">C9 League</button>
+                <button class="filter-btn" onclick="filterUni('Double First Class')">Double First Class</button>
+                <button class="filter-btn" onclick="filterUni('Public')">Public</button>
+            </div>
+            <div>
+                <input type="text" id="uniSearch" class="search-input" placeholder="🔍 Search university..." onkeyup="searchUniversity()">
+            </div>
+        </div>
+        
+        <div id="uniGrid" class="uni-grid"></div>
+        <div id="pagination" class="pagination"></div>
+        
+        <!-- Preparation Tips -->
+        <h2 class="section-title">💡 Preparation Tips</h2>
+        <div id="tipsGrid" class="tips-grid"></div>
+        
+        <!-- Required Documents -->
+        <h2 class="section-title">📋 Required Documents</h2>
+        <ul id="docsList" class="documents-list"></ul>
+        
+        <!-- Apply Button -->
+        <div style="text-align: center; margin: 40px 0;">
+            <button id="registerBtn" style="background: #D4AF37; color: #1E3A8A; padding: 15px 40px; font-size: 18px; font-weight: bold; border: none; border-radius: 50px; cursor: pointer; transition: transform 0.3s;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">📝 Register for CSCA Exam</button>
+        </div>
+    </div>
+    
+    <footer class="footer">
+        <p>© 2026 KHARY GLOBAL EDU. All rights reserved.</p>
+        <p>Your Trusted Partner for Asian Education Excellence</p>
+    </footer>
+    
+    <script>
+        // CSCA Universities Data - 100+ Universities
+        const universities = [
+            { name: "Tsinghua University", city: "Beijing", type: "C9 League", subjects: "Chinese + Math + Science" },
+            { name: "Peking University", city: "Beijing", type: "C9 League", subjects: "Chinese + Math + Science" },
+            { name: "Nanjing University", city: "Nanjing", type: "C9 League", subjects: "Chinese + Math" },
+            { name: "University of Science and Technology Beijing", city: "Beijing", type: "Double First Class", subjects: "Chinese + Math + Physics/Chemistry" },
+            { name: "Guangdong University of Foreign Studies", city: "Guangzhou", type: "Double First Class", subjects: "Chinese + Math" },
+            { name: "China University of Mining and Technology", city: "Xuzhou", type: "Double First Class", subjects: "Chinese + Math + Physics/Chemistry" },
+            { name: "Nanning Normal University", city: "Nanning", type: "Public", subjects: "Chinese + Math" },
+            { name: "Chongqing Normal University", city: "Chongqing", type: "Public", subjects: "Chinese + Math + Physics/Chemistry" },
+            { name: "Shanghai Ocean University", city: "Shanghai", type: "Public", subjects: "Varies by major" },
+            { name: "Chengdu University of Technology", city: "Chengdu", type: "Public", subjects: "Varies by major" },
+            { name: "Fudan University", city: "Shanghai", type: "C9 League", subjects: "Chinese + Math" },
+            { name: "Shanghai Jiao Tong University", city: "Shanghai", type: "C9 League", subjects: "Chinese + Math + Science" },
+            { name: "Zhejiang University", city: "Hangzhou", type: "C9 League", subjects: "Chinese + Math + Science" },
+            { name: "Wuhan University", city: "Wuhan", type: "Double First Class", subjects: "Chinese + Math" },
+            { name: "Huazhong University of Science and Technology", city: "Wuhan", type: "Double First Class", subjects: "Chinese + Math + Physics" },
+            { name: "Sun Yat-sen University", city: "Guangzhou", type: "Double First Class", subjects: "Chinese + Math" },
+            { name: "Harbin Institute of Technology", city: "Harbin", type: "C9 League", subjects: "Chinese + Math + Physics" },
+            { name: "Xi'an Jiaotong University", city: "Xi'an", type: "C9 League", subjects: "Chinese + Math + Physics" },
+            { name: "Tianjin University", city: "Tianjin", type: "Double First Class", subjects: "Chinese + Math + Physics" },
+            { name: "Sichuan University", city: "Chengdu", type: "Double First Class", subjects: "Chinese + Math" },
+            { name: "Beihang University", city: "Beijing", type: "Double First Class", subjects: "Chinese + Math + Physics" },
+            { name: "Beijing Institute of Technology", city: "Beijing", type: "Double First Class", subjects: "Chinese + Math" },
+            { name: "Beijing Normal University", city: "Beijing", type: "Double First Class", subjects: "Chinese + Math" },
+            { name: "East China Normal University", city: "Shanghai", type: "Double First Class", subjects: "Chinese + Math" },
+            { name: "Tongji University", city: "Shanghai", type: "Double First Class", subjects: "Chinese + Math + Physics" },
+            { name: "Nankai University", city: "Tianjin", type: "Double First Class", subjects: "Chinese + Math" },
+            { name: "Xiamen University", city: "Xiamen", type: "Double First Class", subjects: "Chinese + Math" },
+            { name: "Shandong University", city: "Jinan", type: "Double First Class", subjects: "Chinese + Math" },
+            { name: "Southeast University", city: "Nanjing", type: "Double First Class", subjects: "Chinese + Math + Physics" },
+            { name: "Jilin University", city: "Changchun", type: "Double First Class", subjects: "Chinese + Math" },
+            { name: "Chongqing University", city: "Chongqing", type: "Double First Class", subjects: "Chinese + Math + Physics" },
+            { name: "Lanzhou University", city: "Lanzhou", type: "Double First Class", subjects: "Chinese + Math" },
+            { name: "Northwestern Polytechnical University", city: "Xi'an", type: "Double First Class", subjects: "Chinese + Math + Physics" },
+            { name: "South China University of Technology", city: "Guangzhou", type: "Double First Class", subjects: "Chinese + Math + Chemistry" },
+            { name: "Dalian University of Technology", city: "Dalian", type: "Double First Class", subjects: "Chinese + Math + Physics" },
+            { name: "Shanghai University", city: "Shanghai", type: "Double First Class", subjects: "Chinese + Math" },
+            { name: "Jinan University", city: "Guangzhou", type: "Double First Class", subjects: "Chinese + Math" },
+            { name: "Soochow University", city: "Suzhou", type: "Double First Class", subjects: "Chinese + Math" },
+            { name: "Nanjing Normal University", city: "Nanjing", type: "Double First Class", subjects: "Chinese + Math" },
+            { name: "Central China Normal University", city: "Wuhan", type: "Double First Class", subjects: "Chinese + Math" },
+            { name: "Northeast Normal University", city: "Changchun", type: "Double First Class", subjects: "Chinese + Math" },
+            { name: "Shaanxi Normal University", city: "Xi'an", type: "Double First Class", subjects: "Chinese + Math" },
+            { name: "Southwest University", city: "Chongqing", type: "Double First Class", subjects: "Chinese + Math" },
+            { name: "Northwest University", city: "Xi'an", type: "Double First Class", subjects: "Chinese + Math" },
+            { name: "Zhengzhou University", city: "Zhengzhou", type: "Double First Class", subjects: "Chinese + Math" },
+            { name: "Hefei University of Technology", city: "Hefei", type: "Double First Class", subjects: "Chinese + Math + Physics" },
+            { name: "East China University of Science and Technology", city: "Shanghai", type: "Double First Class", subjects: "Chinese + Math + Chemistry" },
+            { name: "Nanjing University of Aeronautics and Astronautics", city: "Nanjing", type: "Double First Class", subjects: "Chinese + Math + Physics" },
+            { name: "Nanjing University of Science and Technology", city: "Nanjing", type: "Double First Class", subjects: "Chinese + Math + Physics" },
+            { name: "Wuhan University of Technology", city: "Wuhan", type: "Double First Class", subjects: "Chinese + Math + Physics" },
+            { name: "China University of Geosciences", city: "Wuhan/Beijing", type: "Double First Class", subjects: "Chinese + Math + Chemistry" },
+            { name: "China University of Petroleum", city: "Beijing/Qingdao", type: "Double First Class", subjects: "Chinese + Math + Chemistry" },
+            { name: "Beijing Jiaotong University", city: "Beijing", type: "Double First Class", subjects: "Chinese + Math + Physics" },
+            { name: "Beijing University of Technology", city: "Beijing", type: "Double First Class", subjects: "Chinese + Math + Physics" },
+            { name: "Beijing University of Chemical Technology", city: "Beijing", type: "Double First Class", subjects: "Chinese + Math + Chemistry" },
+            { name: "Beijing University of Posts and Telecommunications", city: "Beijing", type: "Double First Class", subjects: "Chinese + Math + Physics" },
+            { name: "Beijing Forestry University", city: "Beijing", type: "Double First Class", subjects: "Chinese + Math" },
+            { name: "Beijing Language and Culture University", city: "Beijing", type: "Double First Class", subjects: "Chinese + Math" },
+            { name: "University of International Business and Economics", city: "Beijing", type: "Double First Class", subjects: "Chinese + Math" },
+            { name: "Central University of Finance and Economics", city: "Beijing", type: "Double First Class", subjects: "Chinese + Math" },
+            { name: "Shanghai University of Finance and Economics", city: "Shanghai", type: "Double First Class", subjects: "Chinese + Math" },
+            { name: "Shanghai International Studies University", city: "Shanghai", type: "Double First Class", subjects: "Chinese + Math" },
+            { name: "Shanghai Normal University", city: "Shanghai", type: "Public", subjects: "Chinese + Math" },
+            { name: "Shanghai Maritime University", city: "Shanghai", type: "Public", subjects: "Chinese + Math + Physics" },
+            { name: "Shanghai University of Traditional Chinese Medicine", city: "Shanghai", type: "Public", subjects: "Chinese + Math" },
+            { name: "Guangzhou University", city: "Guangzhou", type: "Public", subjects: "Chinese + Math" },
+            { name: "Guangzhou Medical University", city: "Guangzhou", type: "Public", subjects: "Chinese + Math + Chemistry" },
+            { name: "South China Normal University", city: "Guangzhou", type: "Double First Class", subjects: "Chinese + Math" },
+            { name: "Guangdong University of Technology", city: "Guangzhou", type: "Public", subjects: "Chinese + Math + Physics" },
+            { name: "Shenzhen University", city: "Shenzhen", type: "Public", subjects: "Chinese + Math" },
+            { name: "Nanchang University", city: "Nanchang", type: "Double First Class", subjects: "Chinese + Math" },
+            { name: "Jiangxi University of Finance and Economics", city: "Nanchang", type: "Public", subjects: "Chinese + Math" },
+            { name: "Fujian Normal University", city: "Fuzhou", type: "Public", subjects: "Chinese + Math" },
+            { name: "Fuzhou University", city: "Fuzhou", type: "Double First Class", subjects: "Chinese + Math + Physics" },
+            { name: "Huaqiao University", city: "Quanzhou/Xiamen", type: "Public", subjects: "Chinese + Math" },
+            { name: "Xiamen University of Technology", city: "Xiamen", type: "Public", subjects: "Chinese + Math + Physics" },
+            { name: "Zhejiang University of Technology", city: "Hangzhou", type: "Public", subjects: "Chinese + Math + Physics" },
+            { name: "Zhejiang Normal University", city: "Jinhua", type: "Public", subjects: "Chinese + Math" },
+            { name: "Ningbo University", city: "Ningbo", type: "Public", subjects: "Chinese + Math" },
+            { name: "Hangzhou Normal University", city: "Hangzhou", type: "Public", subjects: "Chinese + Math" },
+            { name: "Jiangsu University", city: "Zhenjiang", type: "Public", subjects: "Chinese + Math + Physics" },
+            { name: "Yangzhou University", city: "Yangzhou", type: "Public", subjects: "Chinese + Math" },
+            { name: "Jiangnan University", city: "Wuxi", type: "Double First Class", subjects: "Chinese + Math + Chemistry" },
+            { name: "Nanjing University of Information Science and Technology", city: "Nanjing", type: "Double First Class", subjects: "Chinese + Math + Physics" },
+            { name: "Nanjing Forestry University", city: "Nanjing", type: "Double First Class", subjects: "Chinese + Math" },
+            { name: "Nanjing Medical University", city: "Nanjing", type: "Public", subjects: "Chinese + Math + Chemistry" },
+            { name: "Nanjing University of Chinese Medicine", city: "Nanjing", type: "Public", subjects: "Chinese + Math" },
+            { name: "Nanjing University of Finance and Economics", city: "Nanjing", type: "Public", subjects: "Chinese + Math" },
+            { name: "Nanjing University of Posts and Telecommunications", city: "Nanjing", type: "Public", subjects: "Chinese + Math + Physics" },
+            { name: "Suzhou University of Science and Technology", city: "Suzhou", type: "Public", subjects: "Chinese + Math + Physics" },
+            { name: "Changshu Institute of Technology", city: "Changshu", type: "Public", subjects: "Chinese + Math" },
+            { name: "Hohai University", city: "Nanjing", type: "Double First Class", subjects: "Chinese + Math + Physics" },
+            { name: "Anhui University", city: "Hefei", type: "Double First Class", subjects: "Chinese + Math" },
+            { name: "Anhui Normal University", city: "Wuhu", type: "Public", subjects: "Chinese + Math" },
+            { name: "Anhui University of Technology", city: "Ma'anshan", type: "Public", subjects: "Chinese + Math + Physics" },
+            { name: "Anhui University of Science and Technology", city: "Huainan", type: "Public", subjects: "Chinese + Math + Physics" }
+        ];
+        
+        let currentFilter = 'all';
+        let currentPage = 1;
+        const itemsPerPage = 20;
+        
+        function displayUniversities() {
+            let filtered = universities;
+            
+            if (currentFilter !== 'all') {
+                filtered = filtered.filter(u => u.type === currentFilter);
+            }
+            
+            const searchTerm = document.getElementById('uniSearch').value.toLowerCase();
+            if (searchTerm) {
+                filtered = filtered.filter(u => u.name.toLowerCase().includes(searchTerm));
+            }
+            
+            const totalPages = Math.ceil(filtered.length / itemsPerPage);
+            const start = (currentPage - 1) * itemsPerPage;
+            const paginated = filtered.slice(start, start + itemsPerPage);
+            
+            const grid = document.getElementById('uniGrid');
+            grid.innerHTML = paginated.map(uni => `
+                <div class="uni-card">
+                    <div class="uni-name">${uni.name}</div>
+                    <div class="uni-requirements"><strong>📚 Required:</strong> ${uni.subjects}</div>
+                    <div class="uni-city">📍 ${uni.city}</div>
+                    <span class="uni-type">${uni.type}</span>
+                </div>
+            `).join('');
+            
+            const paginationDiv = document.getElementById('pagination');
+            if (totalPages > 1) {
+                let pagesHtml = '';
+                for (let i = 1; i <= totalPages; i++) {
+                    pagesHtml += `<button class="page-btn ${i === currentPage ? 'active' : ''}" onclick="goToPage(${i})">${i}</button>`;
+                }
+                paginationDiv.innerHTML = pagesHtml;
+            } else {
+                paginationDiv.innerHTML = '';
+            }
+        }
+        
+        function filterUni(type) {
+            currentFilter = type;
+            currentPage = 1;
+            const btns = document.querySelectorAll('.filter-btn');
+            btns.forEach(btn => btn.classList.remove('active'));
+            if (event && event.target) event.target.classList.add('active');
+            displayUniversities();
+        }
+        
+        function searchUniversity() {
+            currentPage = 1;
+            displayUniversities();
+        }
+        
+        function goToPage(page) {
+            currentPage = page;
+            displayUniversities();
+        }
+        
+        const tips = [
+            "Start preparing 3-6 months before exam",
+            "Take mock tests regularly",
+            "Focus on Chinese language and math",
+            "Review past exam papers",
+            "Join study groups",
+            "Use CSCA official preparation materials"
+        ];
+        
+        function displayTips() {
+            const grid = document.getElementById('tipsGrid');
+            grid.innerHTML = tips.map(tip => `
+                <div class="tip-card">
+                    <div class="tip-icon">📌</div>
+                    <div class="tip-text">${tip}</div>
+                </div>
+            `).join('');
+        }
+        
+        const documents = [
+            "Valid passport",
+            "High school diploma (notarized copy)",
+            "Academic transcripts",
+            "Passport photos (2-inch, white background)",
+            "Application fee payment receipt",
+            "Health certificate",
+            "Language proficiency certificate (if available)"
+        ];
+        
+        function displayDocuments() {
+            const list = document.getElementById('docsList');
+            list.innerHTML = documents.map(doc => `<li>${doc}</li>`).join('');
+        }
+        
+        // Modal functions - Fixed
+        let activeModal = null;
+        
+        function showRegistrationForm() {
+            if (activeModal) {
+                activeModal.remove();
+                activeModal = null;
+            }
+            
+            const modal = document.createElement('div');
+            modal.className = 'modal-overlay';
+            modal.id = 'registrationModal';
+            modal.innerHTML = `
+                <div class="modal-container">
+                    <h2>CSCA Exam Registration</h2>
+                    <form id="cscaForm">
+                        <label>Full Name *</label>
+                        <input type="text" id="regName" required>
+                        
+                        <label>Email *</label>
+                        <input type="email" id="regEmail" required>
+                        
+                        <label>Phone/WhatsApp *</label>
+                        <input type="tel" id="regPhone" required>
+                        
+                        <label>Preferred Exam Session *</label>
+                        <select id="regSession">
+                            <option value="March">March Session</option>
+                            <option value="April">April Session</option>
+                            <option value="June">June Session</option>
+                            <option value="January">January Session</option>
+                            <option value="December">December Session</option>
+                        </select>
+                        
+                        <label>Target University</label>
+                        <input type="text" id="regTargetUni" placeholder="e.g., Tsinghua University">
+                        
+                        <label>Message</label>
+                        <textarea id="regMessage" rows="3"></textarea>
+                        
+                        <div class="modal-buttons">
+                            <button type="button" class="submit-btn" onclick="submitCSCARegistration()">Submit Registration</button>
+                            <button type="button" class="close-btn" onclick="closeRegistrationModal()">Close</button>
+                        </div>
+                    </form>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+            activeModal = modal;
+        }
+        
+        function closeRegistrationModal() {
+            if (activeModal) {
+                activeModal.remove();
+                activeModal = null;
+            }
+        }
+        
+        function submitCSCARegistration() {
+            const name = document.getElementById('regName').value;
+            const email = document.getElementById('regEmail').value;
+            const phone = document.getElementById('regPhone').value;
+            const session = document.getElementById('regSession').value;
+            const targetUni = document.getElementById('regTargetUni').value || '';
+            const message = document.getElementById('regMessage').value || '';
+            
+            if (!name || !email || !phone) {
+                alert('Please fill all required fields');
+                return;
+            }
+            
+            const formData = new FormData();
+            formData.append('university', 'CSCA Exam Registration');
+            formData.append('country', 'China');
+            formData.append('student_name', name);
+            formData.append('student_email', email);
+            formData.append('student_phone', phone);
+            formData.append('program_level', 'Exam Registration');
+            formData.append('preferred_program', `CSCA - ${session} Session`);
+            formData.append('message', `Target University: ${targetUni}\nMessage: ${message}`);
+            
+            fetch('/submit-application-with-files', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('✅ CSCA Exam registration submitted! We will contact you with details.');
+                    closeRegistrationModal();
+                } else {
+                    alert('❌ Error: ' + data.message);
+                }
+            })
+            .catch(error => {
+                alert('❌ Network error. Please try again.');
+            });
+        }
+        
+        // Close modal when clicking outside
+        document.addEventListener('click', function(event) {
+            const modal = document.getElementById('registrationModal');
+            if (modal && event.target === modal) {
+                closeRegistrationModal();
+            }
+        });
+        
+        // Close with ESC key
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape' && activeModal) {
+                closeRegistrationModal();
+            }
+        });
+        
+        // Register button click
+        document.getElementById('registerBtn').addEventListener('click', showRegistrationForm);
+        
+        // Initialize page
+        displayUniversities();
+        displayTips();
+        displayDocuments();
+        
+        // Fix filter button active state on load
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,101 @@
+<div class="navbar">
+    <a href="/">Home</a>
+    <a href="/our-story">Our Story</a>
+    <a href="/compare">Compare</a>
+    <a href="/blog">Blog</a>
+    <a href="/foundation">Foundation</a>
+    <a href="/csca">CSCA Exam</a>
+    <a href="/media">Media Gallery</a>
+    <a href="/dashboard">Dashboard | Logout</a>
+    <a href="/language">English</a>
+    
+    <!-- Three dots button -->
+    <div class="three-dots-menu">☰</div>
+</div>
+
+<!-- Overlay and side panel -->
+<div id="panelOverlay" class="panel-overlay"></div>
+<div id="mainmenuPanel" class="mainmenu-panel">
+    <div style="background:#1E3A8A; padding:20px; text-align:center;">
+        <img src="/static/khary-profile.jpg" style="width:50px; border-radius:50%;">
+        <h3 style="color:white;">KHARY GLOBAL EDU</h3>
+    </div>
+    <a href="/destinations">Destinations</a>
+    <a href="/programs">Programs</a>
+    <a href="/scholarships">Scholarships</a>
+    <a href="/resources">Resources</a>
+    <a href="/about">About</a>
+    <a href="/contact">Contact</a>
+</div>
+
+<style>
+.three-dots-menu {
+    background: rgba(255,255,255,0.2);
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    cursor: pointer;
+    margin-left: auto;
+}
+.mainmenu-panel {
+    position: fixed;
+    top: 0;
+    right: -280px;
+    width: 280px;
+    height: 100%;
+    background: white;
+    z-index: 10000;
+    transition: right 0.3s;
+    overflow-y: auto;
+    box-shadow: -2px 0 10px rgba(0,0,0,0.2);
+}
+.mainmenu-panel.open {
+    right: 0;
+}
+.mainmenu-panel a {
+    display: block;
+    padding: 14px 20px;
+    color: #1E3A8A;
+    text-decoration: none;
+    border-bottom: 1px solid #eee;
+}
+.panel-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+    z-index: 9999;
+    visibility: hidden;
+    opacity: 0;
+    transition: 0.3s;
+}
+.panel-overlay.show {
+    visibility: visible;
+    opacity: 1;
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    var dots = document.querySelector('.three-dots-menu');
+    var panel = document.getElementById('mainmenuPanel');
+    var overlay = document.getElementById('panelOverlay');
+    if (!dots || !panel || !overlay) return;
+    dots.onclick = function() {
+        panel.classList.toggle('open');
+        overlay.classList.toggle('show');
+        document.body.style.overflow = panel.classList.contains('open') ? 'hidden' : '';
+    };
+    overlay.onclick = function() {
+        panel.classList.remove('open');
+        overlay.classList.remove('show');
+        document.body.style.overflow = '';
+    };
+});
+</script>

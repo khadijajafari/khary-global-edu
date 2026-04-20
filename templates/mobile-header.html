@@ -1,0 +1,71 @@
+<!-- MOBILE HEADER WITH THREE DOTS (≡) -->
+<div class="mobile-header">
+    <div class="mobile-logo">
+        <img src="/static/khary-profile.jpg" alt="KHARY GLOBAL EDU">
+        <span>KHARY GLOBAL EDU</span>
+    </div>
+    <div class="three-dots" id="threeDots">
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+</div>
+
+<!-- OVERLAY -->
+<div class="menu-overlay" id="menuOverlay"></div>
+
+<!-- SIDE MENU PANEL -->
+<div class="mobile-menu-panel" id="mobileMenuPanel">
+    <div class="mobile-menu-header">
+        <img src="/static/khary-profile.jpg" alt="KHARY GLOBAL EDU">
+        <h3>KHARY GLOBAL EDU</h3>
+    </div>
+    <a href="/" class="mobile-menu-item">Home</a>
+    <a href="/destinations" class="mobile-menu-item">Destinations</a>
+    <a href="/programs" class="mobile-menu-item">Programs</a>
+    <a href="/scholarships" class="mobile-menu-item">Scholarships</a>
+    <a href="/resources" class="mobile-menu-item">Resources</a>
+    <a href="/about" class="mobile-menu-item">About</a>
+    <a href="/contact" class="mobile-menu-item">Contact</a>
+    <a href="/blog" class="mobile-menu-item">Blog</a>
+    <a href="/media" class="mobile-menu-item">Media</a>
+    <a href="/csc-scholarship" class="mobile-menu-item">CSC Scholarship</a>
+    <a href="/language" class="mobile-menu-item">Language Courses</a>
+</div>
+
+<script>
+    var threeDots = document.getElementById('threeDots');
+    var mobileMenu = document.getElementById('mobileMenuPanel');
+    var overlay = document.getElementById('menuOverlay');
+    
+    function closeMenu() {
+        if(mobileMenu) mobileMenu.classList.remove('open');
+        if(overlay) overlay.classList.remove('show');
+        document.body.style.overflow = '';
+    }
+    
+    function openMenu() {
+        if(mobileMenu) mobileMenu.classList.add('open');
+        if(overlay) overlay.classList.add('show');
+        document.body.style.overflow = 'hidden';
+    }
+    
+    if(threeDots) {
+        threeDots.onclick = function() {
+            if(mobileMenu && mobileMenu.classList.contains('open')) {
+                closeMenu();
+            } else {
+                openMenu();
+            }
+        };
+    }
+    
+    if(overlay) {
+        overlay.onclick = closeMenu;
+    }
+    
+    var links = document.querySelectorAll('.mobile-menu-item');
+    for(var i = 0; i < links.length; i++) {
+        links[i].onclick = closeMenu;
+    }
+</script>

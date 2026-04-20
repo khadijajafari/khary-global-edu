@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Media Gallery - KHARY GLOBAL EDU</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: #EFF6FF;
+        }
+        
+        .navbar {
+            background: white;
+            padding: 15px 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+        }
+        
+        .logo img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 10px;
+            border: 2px solid #D4AF37;
+        }
+        
+        .logo span {
+            font-size: 20px;
+            font-weight: bold;
+            color: #1E3A8A;
+        }
+        
+        .nav-links a {
+            color: #1E3A8A;
+            text-decoration: none;
+            margin-left: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+        
+        .header {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            color: #1E3A8A;
+            font-size: 36px;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            color: #666;
+        }
+        
+        .back-link {
+            display: inline-block;
+            margin-top: 15px;
+            color: #1E3A8A;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        
+        /* Category Tabs */
+        .category-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+        .category-btn {
+            background: white;
+            border: 2px solid #1E3A8A;
+            padding: 10px 25px;
+            border-radius: 40px;
+            color: #1E3A8A;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 14px;
+        }
+        .category-btn:hover, .category-btn.active {
+            background: #1E3A8A;
+            color: white;
+        }
+        
+        /* Size Controls */
+        .size-controls {
+            background: white;
+            padding: 15px 20px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        
+        .size-control {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: #f5f5f5;
+            padding: 8px 18px;
+            border-radius: 40px;
+        }
+        
+        .size-control label {
+            font-weight: bold;
+            color: #1E3A8A;
+            font-size: 14px;
+        }
+        
+        .size-control input {
+            width: 100px;
+            padding: 6px 10px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            text-align: center;
+        }
+        
+        .size-control button {
+            background: #1E3A8A;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+        
+        .size-control button:hover {
+            background: #D4AF37;
+            color: #1E3A8A;
+        }
+        
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+        }
+        
+        .gallery-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+            cursor: pointer;
+        }
+        
+        .gallery-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+        
+        .gallery-card img {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+            display: block;
+        }
+        
+        .gallery-card .info {
+            padding: 15px;
+            text-align: center;
+        }
+        
+        .gallery-card .info h3 {
+            color: #1E3A8A;
+            font-size: 16px;
+            margin-bottom: 5px;
+        }
+        
+        .gallery-card .info p {
+            color: #999;
+            font-size: 12px;
+        }
+        
+        /* Full Screen Modal */
+        .fullscreen-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #0a1928 0%, #1E3A8A 100%);
+            z-index: 99999;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+        
+        .fullscreen-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 40px;
+            max-width: 95%;
+            max-height: 90%;
+            padding: 20px;
+        }
+        
+        .fullscreen-logo-left, .fullscreen-logo-right {
+            flex-shrink: 0;
+            text-align: center;
+        }
+        
+        .fullscreen-logo-left img, .fullscreen-logo-right img {
+            width: var(--logo-size, 100px);
+            height: var(--logo-size, 100px);
+            border-radius: 50%;
+            border: 3px solid #D4AF37;
+            object-fit: cover;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            background: white;
+            padding: 3px;
+            transition: all 0.3s;
+        }
+        
+        .fullscreen-logo-left p, .fullscreen-logo-right p {
+            color: #D4AF37;
+            font-size: 14px;
+            margin-top: 10px;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+        
+        .fullscreen-image-wrapper {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            max-width: 70%;
+            position: relative;
+        }
+        
+        .fullscreen-image-wrapper img {
+            max-width: 100%;
+            max-height: var(--image-size, 80vh);
+            width: auto;
+            height: auto;
+            object-fit: contain;
+            border-radius: 10px;
+            box-shadow: 0 0 30px rgba(0,0,0,0.5);
+            background: white;
+            padding: 5px;
+            transition: all 0.3s;
+        }
+        
+        .fullscreen-image-wrapper video {
+            max-width: 100%;
+            max-height: var(--image-size, 80vh);
+            border-radius: 10px;
+            box-shadow: 0 0 30px rgba(0,0,0,0.5);
+            background: black;
+        }
+        
+        .fullscreen-close {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            color: white;
+            font-size: 40px;
+            cursor: pointer;
+            z-index: 100000;
+            background: rgba(0,0,0,0.5);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: Arial;
+            transition: all 0.3s;
+        }
+        
+        .fullscreen-close:hover {
+            background: rgba(255,255,255,0.3);
+            transform: scale(1.1);
+        }
+        
+        .loading-message {
+            color: white;
+            font-size: 18px;
+            text-align: center;
+        }
+        
+        .footer {
+            background: #1F2937;
+            color: white;
+            text-align: center;
+            padding: 30px;
+            margin-top: 50px;
+        }
+        
+        @media (max-width: 768px) {
+            .gallery-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 15px;
+            }
+            .gallery-card img {
+                height: 150px;
+            }
+            .header h1 {
+                font-size: 28px;
+            }
+            .fullscreen-container {
+                gap: 15px;
+            }
+            .fullscreen-logo-left p, .fullscreen-logo-right p {
+                font-size: 10px;
+            }
+            .fullscreen-image-wrapper {
+                max-width: 55%;
+            }
+            .size-controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .size-control {
+                justify-content: space-between;
+            }
+            .category-tabs {
+                gap: 8px;
+            }
+            .category-btn {
+                padding: 6px 15px;
+                font-size: 12px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .fullscreen-logo-left p, .fullscreen-logo-right p {
+                display: none;
+            }
+            .fullscreen-container {
+                gap: 8px;
+            }
+            .fullscreen-image-wrapper {
+                max-width: 65%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <a href="/" class="logo">
+            <img src="/static/khary-profile.jpg" alt="Khary">
+            <span>KHARY GLOBAL EDU</span>
+        </a>
+        <div class="nav-links">
+            <a href="/">Home</a>
+            <a href="/compare">Compare</a>
+            <a href="/blog">Blog</a>
+            <a href="/media">Media</a>
+        </div>
+    </div>
+    
+    <div class="container">
+        <div class="header">
+            <h1>🏛️ Media Gallery</h1>
+            <p>Click on any image to view in full screen</p>
+            <a href="/" class="back-link">← Back to Home</a>
+        </div>
+        
+        <!-- Category Tabs -->
+        <div class="category-tabs">
+            <button class="category-btn active" onclick="showCategory('china')">🇨🇳 China</button>
+            <button class="category-btn" onclick="showCategory('singapore')">🇸🇬 Singapore</button>
+            <button class="category-btn" onclick="showCategory('japan')">🇯🇵 Japan</button>
+            <button class="category-btn" onclick="showCategory('foundation')">🎓 Foundation</button>
+            <button class="category-btn" onclick="showCategory('videos')">🎥 Videos</button>
+        </div>
+        
+        <!-- Size Controls -->
+        <div class="size-controls">
+            <div class="size-control">
+                <label>🖼️ Logo Size:</label>
+                <input type="range" id="logoSizeSlider" min="100" max="250" value="100" step="5">
+                <span id="logoSizeValue">100px</span>
+                <button onclick="applyLogoSizes()">Apply</button>
+            </div>
+            <div class="size-control">
+                <label>📷 Image Size:</label>
+                <input type="range" id="imageSizeSlider" min="80" max="9180" value="80" step="5">
+                <span id="imageSizeValue">80vh</span>
+                <button onclick="applyImageSizes()">Apply</button>
+            </div>
+            <div class="size-control">
+                <button onclick="resetSizes()" style="background: #D4AF37; color: #1E3A8A;">Reset Default</button>
+            </div>
+        </div>
+        
+        <div class="gallery-grid" id="galleryGrid"></div>
+    </div>
+    
+    <footer class="footer">
+        <p>© 2026 KHARY GLOBAL EDU. All rights reserved.</p>
+        <p>Your Trusted Partner for Asian Education Excellence</p>
+    </footer>
+    
+    <div id="fullscreenModal" class="fullscreen-modal">
+        <div class="fullscreen-close" onclick="closeFullscreen()">✕</div>
+        <div class="fullscreen-container">
+            <div class="fullscreen-logo-left">
+                <img src="/static/khary-profile.jpg" alt="KHARY GLOBAL EDU">
+                <p>KHARY</p>
+            </div>
+            <div class="fullscreen-image-wrapper" id="fullscreenImageWrapper">
+                <img id="fullscreenImage" src="" alt="" onerror="handleImageError()" style="display: none;">
+                <div id="loadingText" class="loading-message" style="display: none;">Loading image...</div>
+            </div>
+            <div class="fullscreen-logo-right">
+                <img src="/static/khary-profile.jpg" alt="KHARY GLOBAL EDU">
+                <p>GLOBAL EDU</p>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // ==================== CHINA IMAGES ====================
+        const chinaImages = [
+            { file: "Beihang", name: "Beihang University (BUAA)", location: "Beijing, China" },
+            { file: "BeijingNormal", name: "Beijing Normal University", location: "Beijing, China" },
+            { file: "BeijingTech", name: "Beijing Institute of Technology", location: "Beijing, China" },
+            { file: "BestCampus", name: "Best University Campus", location: "China" },
+            { file: "Calligraphy", name: "Chinese Calligraphy", location: "China" },
+            { file: "ChinaUni", name: "China University", location: "China" },
+            { file: "ChinaUnis", name: "Chinese Universities Collage", location: "China" },
+            { file: "CultureDay", name: "Culture Day Celebration", location: "China" },
+            { file: "Fudan", name: "Fudan University", location: "Shanghai, China" },
+            { file: "Harbin", name: "Harbin Institute of Technology", location: "Harbin, China" },
+            { file: "HarbinHIT", name: "Harbin Institute of Technology (HIT)", location: "Harbin, China" },
+            { file: "Huazhong", name: "Huazhong University", location: "Wuhan, China" },
+            { file: "IntDay", name: "International Day", location: "China" },
+            { file: "Nanjing", name: "Nanjing University", location: "Nanjing, China" },
+            { file: "Peking", name: "Peking University", location: "Beijing, China" },
+            { file: "ShanghaiJiaoTong", name: "Shanghai Jiao Tong University", location: "Shanghai, China" },
+            { file: "SunYetSun", name: "Sun Yat-sen University", location: "Guangzhou, China" },
+            { file: "SUStech", name: "Southern University of Science and Technology", location: "Shenzhen, China" },
+            { file: "Tsinghua", name: "Tsinghua University", location: "Beijing, China" },
+            { file: "Wuhan", name: "Wuhan University", location: "Wuhan, China" },
+            { file: "XianJiaotong", name: "Xi'an Jiaotong University", location: "Xi'an, China" },
+            { file: "Zhejiang", name: "Zhejiang University", location: "Hangzhou, China" },
+            { file: "ZhejiangZhoushan", name: "Zhejiang University (Zhoushan)", location: "Zhoushan, China" }
+        ];
+        
+        // ==================== SINGAPORE IMAGES ====================
+        const singaporeImages = [
+            { file: "CurtinSn", name: "Curtin Singapore", location: "Singapore" },
+            { file: "JamesCook", name: "James Cook University Singapore", location: "Singapore" },
+            { file: "MurdochSn", name: "Murdoch University Singapore", location: "Singapore" },
+            { file: "NusSingapole", name: "National University of Singapore (NUS)", location: "Singapore" },
+            { file: "SingapoleInstitute", name: "Singapore Institute of Technology", location: "Singapore" },
+            { file: "SingapoleManagement", name: "Singapore Management University (SMU)", location: "Singapore" },
+            { file: "SingapoleUni", name: "Singapore University of Social Sciences", location: "Singapore" },
+            { file: "SusSingapole", name: "Singapore University of Technology and Design (SUTD)", location: "Singapore" }
+        ];
+        
+        // ==================== JAPAN IMAGES ====================
+        const japanImages = [
+            { file: "Hokkaido", name: "Hokkaido University", location: "Sapporo, Japan" },
+            { file: "IntTokyo", name: "International Christian University Tokyo", location: "Tokyo, Japan" },
+            { file: "Kyoto", name: "Kyoto University", location: "Kyoto, Japan" },
+            { file: "Kyushu", name: "Kyushu University", location: "Fukuoka, Japan" },
+            { file: "Nagoya", name: "Nagoya University", location: "Nagoya, Japan" },
+            { file: "Osaka", name: "Osaka University", location: "Osaka, Japan" },
+            { file: "Tokyoinst", name: "Tokyo Institute of Technology", location: "Tokyo, Japan" }
+        ];
+        
+        // ==================== FOUNDATION IMAGES ====================
+        const foundationImages = [
+            { file: "KharyFoundation", name: "Khary Foundation Program", location: "Study Abroad Foundation" },
+            { file: "UnvFoundationProgram", name: "University Foundation Program", location: "Prepare for Bachelor's" },
+            { file: "foundation", name: "Foundation Program Overview", location: "Pathway to University" },
+            { file: "ChinaFoundation", name: "China Foundation Program", location: "Study in China" },
+            { file: "FoundationChina", name: "Foundation in China", location: "Chinese University Pathway" },
+            { file: "ServiceFee", name: "Service Fee Guide", location: "Our Services" },
+            { file: "FeesStructure", name: "Fees Structure", location: "Tuition and Costs" }
+        ];
+        
+        // ==================== VIDEOS ====================
+        const videos = [
+            { file: "ChinaScholarship.mp4", name: "China Scholarship (CSC)", desc: "Complete guide to Chinese Government Scholarship" },
+            { file: "CscA.mp4", name: "CSCA Exam Guide", desc: "How to register for China Scholastic Competency Assessment (CSCA)" },
+            { file: "DUT.mp4", name: "DUT Scholarship", desc: "Dalian University of Technology scholarship guide" },
+            { file: "Foundation.mp4", name: "Foundation Programs", desc: "Understanding foundation programs in Asia" },
+            { file: "language.mp4", name: "Language Preparation", desc: "HSK and Chinese language preparation tips" },
+            { file: "Ourstory.mp4", name: "Our Story", desc: "The story behind KHARY GLOBAL EDU" },
+            { file: "SelfFunded.mp4", name: "Self-Funded Guide", desc: "Guide for self-funded international students" }
+        ];
+        
+        let currentCategory = 'china';
+        let currentVideoElement = null;
+        
+        const galleryGrid = document.getElementById('galleryGrid');
+        const modal = document.getElementById('fullscreenModal');
+        const modalImage = document.getElementById('fullscreenImage');
+        const loadingText = document.getElementById('loadingText');
+        const imageWrapper = document.getElementById('fullscreenImageWrapper');
+        
+        // Size control functions
+        function applyLogoSizes() {
+            const logoSize = document.getElementById('logoSizeSlider').value;
+            document.documentElement.style.setProperty('--logo-size', logoSize + 'px');
+            document.getElementById('logoSizeValue').innerText = logoSize + 'px';
+        }
+        
+        function applyImageSizes() {
+            const imageSize = document.getElementById('imageSizeSlider').value;
+            document.documentElement.style.setProperty('--image-size', imageSize + 'vh');
+            document.getElementById('imageSizeValue').innerText = imageSize + 'vh';
+        }
+        
+        function resetSizes() {
+            document.getElementById('logoSizeSlider').value = 100;
+            document.getElementById('imageSizeSlider').value = 80;
+            document.documentElement.style.setProperty('--logo-size', '100px');
+            document.documentElement.style.setProperty('--image-size', '80vh');
+            document.getElementById('logoSizeValue').innerText = '100px';
+            document.getElementById('imageSizeValue').innerText = '80vh';
+        }
+        
+        function handleImageError() {
+            modalImage.style.display = 'none';
+            loadingText.style.display = 'block';
+            loadingText.innerHTML = '📸 Image not available<br><span style="font-size: 14px;">KHARY GLOBAL EDU</span>';
+        }
+        
+        function handleImageLoad() {
+            modalImage.style.display = 'block';
+            loadingText.style.display = 'none';
+        }
+        
+        // CLOSE FULLSCREEN - This is the function you asked about
+        function closeFullscreen() {
+            modal.style.display = 'none';
+            document.body.style.overflow = '';
+            
+            // Stop and remove video if exists
+            if (currentVideoElement) {
+                currentVideoElement.pause();
+                currentVideoElement.remove();
+                currentVideoElement = null;
+            }
+            
+            // Reset image
+            modalImage.style.display = 'block';
+            modalImage.src = '';
+            loadingText.style.display = 'none';
+        }
+        
+        // Open fullscreen image
+        function openFullscreen(imageBaseName, imageName, category) {
+            // Remove any existing video
+            if (currentVideoElement) {
+                currentVideoElement.remove();
+                currentVideoElement = null;
+            }
+            
+            modalImage.style.display = 'block';
+            
+            let imagePath = '';
+            if (category === 'china') imagePath = '/static/img/china/' + imageBaseName + '.jpg';
+            else if (category === 'singapore') imagePath = '/static/img/singapore/' + imageBaseName + '.jpg';
+            else if (category === 'japan') imagePath = '/static/img/japan/' + imageBaseName + '.jpg';
+            else if (category === 'foundation') imagePath = '/static/img/foundation/' + imageBaseName + '.jpg';
+            
+            // Try .jpg first, if fails try .png
+            const testImg = new Image();
+            testImg.onload = function() {
+                modalImage.src = imagePath;
+                modalImage.alt = imageName;
+                modalImage.onload = handleImageLoad;
+                modalImage.onerror = handleImageError;
+                modal.style.display = 'flex';
+                document.body.style.overflow = 'hidden';
+            };
+            testImg.onerror = function() {
+                const pngPath = imagePath.replace('.jpg', '.png');
+                modalImage.src = pngPath;
+                modalImage.alt = imageName;
+                modalImage.onload = handleImageLoad;
+                modalImage.onerror = handleImageError;
+                modal.style.display = 'flex';
+                document.body.style.overflow = 'hidden';
+            };
+            testImg.src = imagePath;
+        }
+        
+        // Open video - PLAYS IN MODAL
+        function openVideo(videoFile, title) {
+            // Remove any existing video
+            if (currentVideoElement) {
+                currentVideoElement.remove();
+                currentVideoElement = null;
+            }
+            
+            // Hide image
+            modalImage.style.display = 'none';
+            loadingText.style.display = 'none';
+            
+            // Create video element
+            const videoElement = document.createElement('video');
+            videoElement.controls = true;
+            videoElement.autoplay = true;
+            videoElement.style.maxWidth = '100%';
+            videoElement.style.maxHeight = '80vh';
+            videoElement.style.borderRadius = '10px';
+            videoElement.style.boxShadow = '0 0 30px rgba(0,0,0,0.5)';
+            
+            const source = document.createElement('source');
+            source.src = '/static/Video/' + videoFile;
+            source.type = 'video/mp4';
+            videoElement.appendChild(source);
+            
+            imageWrapper.appendChild(videoElement);
+            currentVideoElement = videoElement;
+            
+            modal.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+            
+            videoElement.play().catch(e => console.log('Autoplay prevented:', e));
+        }
+        
+        // Show category
+        function showCategory(category) {
+            currentCategory = category;
+            
+            document.querySelectorAll('.category-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            let images = [];
+            let isVideo = false;
+            
+            if (category === 'china') images = chinaImages;
+            else if (category === 'singapore') images = singaporeImages;
+            else if (category === 'japan') images = japanImages;
+            else if (category === 'foundation') images = foundationImages;
+            else if (category === 'videos') {
+                images = videos;
+                isVideo = true;
+            }
+            
+            displayGallery(images, category, isVideo);
+        }
+        
+        // Display gallery
+        function displayGallery(images, category, isVideo) {
+            let html = '';
+            
+            for (let i = 0; i < images.length; i++) {
+                const item = images[i];
+                
+                    if (isVideo) {
+    const videoFile = item.file.replace('.mp4', '');
+    const thumbJpg = '/static/img/thumbnails/' + videoFile + '.jpg';
+    const thumbPng = '/static/img/thumbnails/' + videoFile + '.png';
+    
+    html += `
+        <div class="gallery-card" onclick="openVideo('${item.file}', '${item.name}')">
+            <div style="position: relative; height: 220px; overflow: hidden; background: #1E3A8A;">
+                <img src="${thumbJpg}" 
+                     alt="${item.name}"
+                     style="width: 100%; height: 100%; object-fit: cover;"
+                     onerror="this.src='${thumbPng}'; this.onerror=null;">
+                <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.3); display: flex; align-items: center; justify-content: center;">
+                    <div style="background: rgba(0,0,0,0.7); width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                        <span style="font-size: 30px; color: white;">▶</span>
+                    </div>
+                </div>
+            </div>
+            <div class="info">
+                <h3>${item.name}</h3>
+                <p>${item.desc}</p>
+            </div>
+        </div>
+    `;
+
+
+
+                } else {
+                    const jpgPath = '/static/img/' + category + '/' + item.file + '.jpg';
+                    const pngPath = '/static/img/' + category + '/' + item.file + '.png';
+                    
+                    html += `
+                        <div class="gallery-card" onclick="openFullscreen('${item.file}', '${item.name}', '${category}')">
+                            <img src="${jpgPath}" 
+                                 alt="${item.name}"
+                                 onerror="this.onerror=null; this.src='${pngPath}'; if(this.src === '${pngPath}' && this.naturalWidth === 0) this.src='https://via.placeholder.com/300x200?text=${item.name}'">
+                            <div class="info">
+                                <h3>${item.name}</h3>
+                                <p>${item.location}</p>
+                            </div>
+                        </div>
+                    `;
+                }
+            }
+            
+            galleryGrid.innerHTML = html;
+        }
+        
+        // Close with ESC key
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape' && modal.style.display === 'flex') {
+                closeFullscreen();
+            }
+        });
+        
+        // Set initial sizes
+        document.documentElement.style.setProperty('--logo-size', '100px');
+        document.documentElement.style.setProperty('--image-size', '80vh');
+        
+        // Load China gallery by default
+        displayGallery(chinaImages, 'china', false);
+        
+        // Make functions global
+        window.closeFullscreen = closeFullscreen;
+        window.openFullscreen = openFullscreen;
+        window.openVideo = openVideo;
+        window.showCategory = showCategory;
+        window.applyLogoSizes = applyLogoSizes;
+        window.applyImageSizes = applyImageSizes;
+        window.resetSizes = resetSizes;
+    </script>
+</body>
+</html>

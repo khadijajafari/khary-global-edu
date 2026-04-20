@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>KHARY GLOBAL EDU - Admin Panel</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: #EFF6FF;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #1E3A8A;
+            font-size: 2rem;
+            border-bottom: 3px solid #D4AF37;
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+        }
+        h1 span { color: #D4AF37; }
+        .stats {
+            background: linear-gradient(135deg, #1E3A8A, #2D4FA8);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+        }
+        .stat-card {
+            background: rgba(255,255,255,0.1);
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            cursor: pointer;
+        }
+        .stat-number { font-size: 2rem; font-weight: bold; }
+        .filters {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        .filter-group { display: flex; gap: 10px; align-items: center; }
+        .filter-group input, .filter-group select {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .btn {
+            background: #1E3A8A;
+            color: white;
+            padding: 8px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .btn-green { background: #28a745; }
+        .btn-gray { background: #6c757d; }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            font-size: 0.9rem;
+        }
+        th {
+            background: #1E3A8A;
+            color: white;
+            padding: 12px;
+            position: sticky;
+            top: 0;
+        }
+        td {
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+            vertical-align: middle;
+        }
+        tr:hover { background: #EFF6FF; }
+        .status-select {
+            padding: 5px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            cursor: pointer;
+        }
+        .view-btn, .delete-btn {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 0 2px;
+        }
+        .view-btn { background: #1E3A8A; color: white; }
+        .delete-btn { background: #dc3545; color: white; }
+        .message-cell {
+            max-width: 200px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            cursor: pointer;
+        }
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            max-width: 500px;
+            width: 90%;
+        }
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        @media (max-width: 768px) {
+            .stats { grid-template-columns: repeat(2, 1fr); }
+            table { display: block; overflow-x: auto; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>KHARY <span>GLOBAL EDU</span></h1>
+        <p>Admin Panel - Study Abroad Guidance for Asian Universities</p>
+        
+    
+        <div id="stats" class="stats">
+            <div class="stat-card" onclick="filterByStatus('all')">
+                <div class="stat-number" id="totalApps">0</div>
+                <div>Total Applications</div>
+            </div>
+            <div class="stat-card" onclick="filterByStatus('new')">
+                <div class="stat-number" id="newApps">0</div>
+                <div>New</div>
+            </div>
+            <div class="stat-card" onclick="filterByStatus('contacted')">
+                <div class="stat-number" id="contactedApps">0</div>
+                <div>Contacted</div>
+            </div>
+            <div class="stat-card" onclick="filterByStatus('accepted')">
+                <div class="stat-number" id="acceptedApps">0</div>
+                <div>Accepted</div>
+            </div>
+        </div>
+        
+        <div class="filters">
+            <div class="filter-group">
+                <label>🔍 Search:</label>
+                <input type="text" id="searchInput" placeholder="Name, email, university..." onkeyup="filterTable()">
+            </div>
+            <div class="filter-group">
+                <label>🌍 Country:</label>
+                <select id="countryFilter" onchange="filterTable()">
+                    <option value="all">All Countries</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label>📊 Status:</label>
+                <select id="statusFilter" onchange="filterTable()">
+                    <option value="all">All Status</option>
+                    <option value="new">🆕 New</option>
+                    <option value="contacted">📞 Contacted</option>
+                    <option value="accepted">✅ Accepted</option>
+                    <option value="rejected">❌ Rejected</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <button class="btn btn-green" onclick="exportToExcel()">📥 Export to Excel</button>
+                <button class="btn" onclick="sendEmailAlerts()">📧 Send Alerts</button>
+                <button class="btn" onclick="location.reload()">🔄 Refresh</button>
+            </div>
+        </div>
+        
+        <div style="overflow-x: auto;">
+            <table id="applicationsTable">
+                <thead>
+                    <tr>
+                        <th>University</th>
+                        <th>Student</th>
+                        <th>Country</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>Program</th>
+                        <th>Date</th>
+                        <th>Message</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody">
+                    <tr><td colspan="10" style="text-align:center;">Loading...</td></tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="button-group">
+            <a href="/" class="btn">← Back to Home</a>
+            <a href="/student-management" class="btn btn-gray">👥 Student Management</a>
+            <a href="/khary-global-edu/consultations" class="btn">📋 View Consultations</a>
+            <a href="/static/admin-subscribers.html" class="btn">📧 View Subscribers</a>
+            <a href="/khary-global-edu/reply-chat" class="btn" style="background: #10B981; color: white;">💬 Manage Live Chats</a>
+        </div>
+    </div>
+
+    <script>
+        let allApps = [];
+        
+        // Load data from API
+        async function loadData() {
+            try {
+                const response = await fetch('/api/admin/applications');
+                const data = await response.json();
+                if (data.success) {
+                    allApps = data.applications;
+                    updateStats();
+                    renderTable();
+                    populateCountryFilter();
+                } else {
+                    document.getElementById('tableBody').innerHTML = '<tr><td colspan="10">Error loading data</td></tr>';
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                document.getElementById('tableBody').innerHTML = '<tr><td colspan="10">Error loading data</td></tr>';
+            }
+        }
+        
+        function updateStats() {
+            document.getElementById('totalApps').innerText = allApps.length;
+            document.getElementById('newApps').innerText = allApps.filter(a => a.status === 'new').length;
+            document.getElementById('contactedApps').innerText = allApps.filter(a => a.status === 'contacted').length;
+            document.getElementById('acceptedApps').innerText = allApps.filter(a => a.status === 'accepted').length;
+        }
+        
+        function populateCountryFilter() {
+            const countries = [...new Set(allApps.map(a => a.country).filter(c => c))];
+            const select = document.getElementById('countryFilter');
+            countries.forEach(country => {
+                const option = document.createElement('option');
+                option.value = country;
+                option.textContent = country;
+                select.appendChild(option);
+            });
+        }
+        
+        function renderTable() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const countryFilter = document.getElementById('countryFilter').value;
+            const statusFilter = document.getElementById('statusFilter').value;
+            
+            const filtered = allApps.filter(app => {
+                const matchesSearch = searchTerm === '' || 
+                    app.student_name?.toLowerCase().includes(searchTerm) ||
+                    app.student_email?.toLowerCase().includes(searchTerm) ||
+                    app.university?.toLowerCase().includes(searchTerm);
+                const matchesCountry = countryFilter === 'all' || app.country === countryFilter;
+                const matchesStatus = statusFilter === 'all' || app.status === statusFilter;
+                return matchesSearch && matchesCountry && matchesStatus;
+            });
+            
+            const tbody = document.getElementById('tableBody');
+            
+            if (filtered.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="10">No applications found</td></tr>';
+                return;
+            }
+            
+            tbody.innerHTML = filtered.map(app => `
+                <tr id="row-${app.id}">
+                    <td><strong>${escapeHtml(app.university || '-')}</strong></td>
+                    <td>${escapeHtml(app.student_name || '-')}</td>
+                    <td>${escapeHtml(app.country || '-')}</td>
+                    <td>${escapeHtml(app.student_email || '-')}</td>
+                    <td>${escapeHtml(app.student_phone || '-')}</td>
+                    <td>${escapeHtml(app.program_level || '-')}</td>
+                    <td>${app.application_date ? app.application_date.substring(0, 10) : '-'}</td>
+                    <td class="message-cell" title="${escapeHtml(app.message || 'No message')}">${escapeHtml(app.message ? (app.message.length > 40 ? app.message.substring(0, 37) + '...' : app.message) : 'No message')}</td>
+                    <td>
+                        <select class="status-select" data-id="${app.id}" style="padding: 5px; border-radius: 5px; border: 1px solid #ccc;">
+                            <option value="new" ${app.status === 'new' ? 'selected' : ''}>🆕 New</option>
+                            <option value="contacted" ${app.status === 'contacted' ? 'selected' : ''}>📞 Contacted</option>
+                            <option value="accepted" ${app.status === 'accepted' ? 'selected' : ''}>✅ Accepted</option>
+                            <option value="rejected" ${app.status === 'rejected' ? 'selected' : ''}>❌ Rejected</option>
+                        </select>
+                    </td>
+                    <td>
+                        <button class="view-btn" onclick="viewApp(${app.id})">👁️ View</button>
+                        <button class="delete-btn" onclick="deleteApp(${app.id})">🗑️ Delete</button>
+                    </td>
+                </tr>
+            `).join('');
+            
+            // Add event listeners to status selects
+            document.querySelectorAll('.status-select').forEach(select => {
+                select.addEventListener('change', function() {
+                    const id = this.dataset.id;
+                    const newStatus = this.value;
+                    updateStatus(id, newStatus);
+                });
+            });
+        }
+        
+        function filterTable() {
+            renderTable();
+        }
+        
+        function filterByStatus(status) {
+            document.getElementById('statusFilter').value = status;
+            renderTable();
+        }
+        
+        async function updateStatus(id, newStatus) {
+            try {
+                const response = await fetch('/update-application-status', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ id, status: newStatus })
+                });
+                const data = await response.json();
+                if (data.success) {
+                    const app = allApps.find(a => a.id === id);
+                    if (app) app.status = newStatus;
+                    updateStats();
+                    renderTable();
+                }
+            } catch (error) {
+                alert('Error updating status');
+            }
+        }
+        
+        async function deleteApp(id) {
+            if (!confirm('Are you sure you want to delete this application?')) return;
+            try {
+                const response = await fetch('/delete-application', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ id })
+                });
+                const data = await response.json();
+                if (data.success) {
+                    allApps = allApps.filter(a => a.id !== id);
+                    updateStats();
+                    renderTable();
+                }
+            } catch (error) {
+                alert('Error deleting application');
+            }
+        }
+        
+        function viewApp(id) {
+            const app = allApps.find(a => a.id === id);
+            if (!app) return;
+            
+            const modalHtml = `
+                <div class="modal" id="viewModal">
+                    <div class="modal-content">
+                        <h3>Application Details</h3>
+                        <p><strong>Student:</strong> ${escapeHtml(app.student_name)}</p>
+                        <p><strong>Email:</strong> ${escapeHtml(app.student_email)}</p>
+                        <p><strong>Phone:</strong> ${escapeHtml(app.student_phone || '-')}</p>
+                        <p><strong>University:</strong> ${escapeHtml(app.university)}</p>
+                        <p><strong>Country:</strong> ${escapeHtml(app.country)}</p>
+                        <p><strong>Program:</strong> ${escapeHtml(app.program_level)}</p>
+                        <p><strong>Preferred Program:</strong> ${escapeHtml(app.preferred_program || '-')}</p>
+                        <p><strong>Message:</strong> ${escapeHtml(app.message || '-')}</p>
+                        <p><strong>Date:</strong> ${app.application_date || '-'}</p>
+                        <p><strong>Status:</strong> ${app.status}</p>
+                        <button class="btn" onclick="closeModal()">Close</button>
+                    </div>
+                </div>
+            `;
+            document.body.insertAdjacentHTML('beforeend', modalHtml);
+        }
+        
+        function closeModal() {
+            const modal = document.getElementById('viewModal');
+            if (modal) modal.remove();
+        }
+        
+        function exportToExcel() {
+            const searchTerm = document.getElementById('searchInput').value;
+            const country = document.getElementById('countryFilter').value;
+            const status = document.getElementById('statusFilter').value;
+            window.location.href = `/export-applications?search=${encodeURIComponent(searchTerm)}&country=${encodeURIComponent(country)}&status=${encodeURIComponent(status)}`;
+        }
+        
+        function sendEmailAlerts() {
+            const newApps = allApps.filter(a => a.status === 'new');
+            if (newApps.length === 0) {
+                alert('No new applications to send alerts for');
+                return;
+            }
+            if (confirm(`Send alerts for ${newApps.length} new application(s)?`)) {
+                fetch('/api/admin/send-alerts', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ applications: newApps })
+                })
+                .then(r => r.json())
+                .then(data => {
+                    if (data.success) {
+                        alert(`Sent ${data.sent} email alerts!`);
+                    } else {
+                        alert('Error sending alerts');
+                    }
+                });
+            }
+        }
+        
+        function escapeHtml(text) {
+            if (!text) return '';
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+        
+        // Load data on page load
+        loadData();
+    </script>
+    
+</body>
+</html>

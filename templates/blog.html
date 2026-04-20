@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Blog - KHARY GLOBAL EDU</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: #EFF6FF;
+        }
+        .navbar {
+            background: white;
+            padding: 15px 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .logo {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+        }
+        .logo img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 10px;
+            border: 2px solid #D4AF37;
+        }
+        .logo span {
+            font-size: 20px;
+            font-weight: bold;
+            color: #1E3A8A;
+        }
+        .nav-links a {
+            color: #1E3A8A;
+            text-decoration: none;
+            margin-left: 20px;
+            transition: color 0.3s;
+        }
+        .nav-links a:hover {
+            color: #D4AF37;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        h1 {
+            color: #1E3A8A;
+            text-align: center;
+            font-size: 36px;
+            margin-bottom: 10px;
+        }
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 40px;
+        }
+        
+        /* Category Filter Buttons */
+        .category-filters {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 40px;
+        }
+        .filter-btn {
+            background: white;
+            border: 2px solid #e0e0e0;
+            padding: 8px 20px;
+            border-radius: 30px;
+            font-weight: 600;
+            color: #1E3A8A;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .filter-btn:hover {
+            background: #D4AF37;
+            border-color: #D4AF37;
+            color: #1E3A8A;
+        }
+        .filter-btn.active {
+            background: #1E3A8A;
+            border-color: #D4AF37;
+            color: white;
+        }
+        
+        /* Country Sections */
+        .country-section {
+            margin-bottom: 50px;
+        }
+        .country-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 25px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #D4AF37;
+        }
+        .country-header .flag {
+            font-size: 32px;
+        }
+        .country-header h2 {
+            color: #1E3A8A;
+            font-size: 28px;
+        }
+        .country-header .count {
+            background: #1E3A8A;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 14px;
+        }
+        
+        /* Blog Grid */
+        .blog-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 25px;
+        }
+        .blog-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+        }
+        .blog-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(30, 58, 138, 0.15);
+            border-bottom-color: #D4AF37;
+        }
+        .blog-card-header {
+            background: linear-gradient(135deg, #1E3A8A, #2D4FA8);
+            color: white;
+            padding: 20px;
+            position: relative;
+        }
+        .blog-category {
+            background: #D4AF37;
+            color: #1E3A8A;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: bold;
+            display: inline-block;
+            margin-bottom: 12px;
+        }
+        .blog-title {
+            font-size: 18px;
+            font-weight: 600;
+            line-height: 1.4;
+            margin-bottom: 10px;
+        }
+        .blog-meta {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: #ddd;
+            margin-top: 10px;
+        }
+        .blog-card-body {
+            padding: 20px;
+        }
+        .blog-excerpt {
+            color: #666;
+            margin-bottom: 15px;
+            line-height: 1.5;
+            font-size: 14px;
+        }
+        .read-more {
+            background: #1E3A8A;
+            color: white;
+            padding: 8px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        .read-more:hover {
+            background: #D4AF37;
+            color: #1E3A8A;
+        }
+        
+        .footer {
+            background: #1F2937;
+            color: white;
+            padding: 30px;
+            text-align: center;
+            margin-top: 50px;
+        }
+        .loading {
+            text-align: center;
+            padding: 50px;
+            color: #1E3A8A;
+        }
+        
+        @media (max-width: 768px) {
+            .category-filters {
+                gap: 8px;
+            }
+            .filter-btn {
+                padding: 6px 14px;
+                font-size: 12px;
+            }
+            .blog-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <a href="/" class="logo">
+            <img src="/static/khary-profile.jpg" alt="Khary">
+            <span>KHARY GLOBAL EDU</span>
+        </a>
+        <div class="nav-links">
+            <a href="/">Home</a>
+            <a href="/compare">Compare</a>
+            <a href="/blog">Blog</a>
+            <span id="authLinks"></span>
+            <a href="/khary-global-edu">Admin</a>
+        </div>
+    </div>
+    
+    <div class="container">
+        <h1>📚 Study Tips & Insights</h1>
+        <p class="subtitle">Expert advice for studying in China, Singapore, Malaysia, Japan & Korea</p>
+        
+        <!-- Category Filters -->
+        <div class="category-filters" id="categoryFilters">
+            <button class="filter-btn active" data-category="all">All Posts</button>
+            <button class="filter-btn" data-category="China">🇨🇳 China</button>
+            <button class="filter-btn" data-category="Singapore">🇸🇬 Singapore</button>
+            <button class="filter-btn" data-category="Malaysia">🇲🇾 Malaysia</button>
+            <button class="filter-btn" data-category="Japan">🇯🇵 Japan</button>
+            <button class="filter-btn" data-category="Korea">🇰🇷 Korea</button>
+            <button class="filter-btn" data-category="Scholarships">💰 Scholarships</button>
+            <button class="filter-btn" data-category="Visa Guide">🛂 Visa Guide</button>
+            <button class="filter-btn" data-category="Student Life">🎓 Student Life</button>
+            <button class="filter-btn" data-category="Guide">📖 Guide</button>
+        </div>
+        
+        <!-- Blog Posts Container -->
+        <div id="blogContainer"></div>
+    </div>
+    
+    <footer class="footer">
+        <p>© <span id="currentYear"></span> KHARY GLOBAL EDU. All rights reserved.</p>
+        <p>Your Trusted Partner for Asian Education Excellence</p>
+    </footer>
+    
+    <script>
+        // Set current year
+        document.getElementById('currentYear').textContent = new Date().getFullYear();
+        
+        let allPosts = [];
+        let currentCategory = 'all';
+        
+        // Check auth status for navbar
+        fetch('/check-auth')
+            .then(response => response.json())
+            .then(data => {
+                const authLinks = document.getElementById('authLinks');
+                if (authLinks) {
+                    if (data.logged_in) {
+                        authLinks.innerHTML = '<a href="/dashboard">Dashboard</a> <a href="/logout">Logout</a>';
+                    } else {
+                        authLinks.innerHTML = '<a href="/login">Login</a> <a href="/register">Register</a>';
+                    }
+                }
+            });
+        
+        // Load blog posts
+        fetch('/api/blog/posts')
+            .then(response => response.json())
+            .then(posts => {
+                allPosts = posts;
+                displayPosts();
+            })
+            .catch(error => {
+                console.error('Error loading posts:', error);
+                document.getElementById('blogContainer').innerHTML = '<div style="text-align:center; padding:50px; color:red;">Error loading articles. Please refresh the page.</div>';
+            });
+        
+        // Filter buttons
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                currentCategory = this.dataset.category;
+                displayPosts();
+            });
+        });
+        
+        // Display posts by category
+        function displayPosts() {
+            const container = document.getElementById('blogContainer');
+            
+            let filteredPosts = allPosts;
+            if (currentCategory !== 'all') {
+                filteredPosts = allPosts.filter(post => post.category === currentCategory);
+            }
+            
+            if (filteredPosts.length === 0) {
+                container.innerHTML = '<div style="text-align:center; padding:50px; background:white; border-radius:15px;">No articles found in this category. Check back soon!</div>';
+                return;
+            }
+            
+            // Group posts by country for better organization
+            const countryOrder = ['China', 'Singapore', 'Malaysia', 'Japan', 'Korea', 'Scholarships', 'Visa Guide', 'Student Life', 'Guide'];
+            
+            let html = '';
+            
+            if (currentCategory === 'all') {
+                // Show organized by country sections
+                for (const country of countryOrder) {
+                    const countryPosts = filteredPosts.filter(post => post.category === country);
+                    if (countryPosts.length > 0) {
+                        const flag = getFlag(country);
+                        html += `
+                            <div class="country-section">
+                                <div class="country-header">
+                                    <span class="flag">${flag}</span>
+                                    <h2>${country}</h2>
+                                    <span class="count">${countryPosts.length} articles</span>
+                                </div>
+                                <div class="blog-grid">
+                                    ${countryPosts.map(post => renderPostCard(post)).join('')}
+                                </div>
+                            </div>
+                        `;
+                    }
+                }
+            } else {
+                // Show as simple grid for filtered view
+                html = `<div class="blog-grid">${filteredPosts.map(post => renderPostCard(post)).join('')}</div>`;
+            }
+            
+            container.innerHTML = html;
+        }
+        
+        function getFlag(category) {
+            const flags = {
+                'China': '🇨🇳',
+                'Singapore': '🇸🇬',
+                'Malaysia': '🇲🇾',
+                'Japan': '🇯🇵',
+                'Korea': '🇰🇷',
+                'Scholarships': '💰',
+                'Visa Guide': '🛂',
+                'Student Life': '🎓',
+                'Guide': '📖'
+            };
+            return flags[category] || '📚';
+        }
+        
+        function renderPostCard(post) {
+            return `
+                <div class="blog-card" onclick="window.location.href='/article/${post.id}'">
+                    <div class="blog-card-header">
+                        <span class="blog-category">${post.category}</span>
+                        <div class="blog-title">${escapeHtml(post.title)}</div>
+                        <div class="blog-meta">
+                            <span>📅 ${post.date}</span>
+                            <span>⏱️ ${post.read_time}</span>
+                        </div>
+                    </div>
+                    <div class="blog-card-body">
+                        <div class="blog-excerpt">${escapeHtml(post.excerpt || 'Read this article to learn more about studying in ' + post.category + '...')}</div>
+                        <button class="read-more" onclick="event.stopPropagation(); window.location.href='/article/${post.id}'">Read More →</button>
+                    </div>
+                </div>
+            `;
+        }
+        
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+    </script>
+</body>
+</html>
