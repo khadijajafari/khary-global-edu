@@ -30,14 +30,41 @@ from email.mime.multipart import MIMEMultipart
 
 import os
 
+import os
+import sqlite3
+
 def get_db():
+    # Try multiple possible paths
+    possible_paths = [
+        'applications.db',
+        '/opt/render/project/src/applications.db',
+        os.path.join(os.getcwd(), 'applications.db'),
+        '/data/applications.db'  # if you add disk
+    ]
+    
+    for path in possible_paths:
+        try:
+            conn = sqlite3.connect(path, timeout=30)
+            conn.execute('PRAGMA journal_mode=WAL')
+            conn.row_factory = sqlite3.Row
+            return conn
+        except Exception as e:
+            continue
+    
+    # If all fail, create a new database in current directory
     try:
-        conn = sqlite3.connect('applications.db', timeout=20)
+        conn = sqlite3.connect('applications.db', timeout=30)
         conn.execute('PRAGMA journal_mode=WAL')
         conn.row_factory = sqlite3.Row
+        # Create tables if needed
+        c = conn.cursor()
+        c.execute('''CREATE TABLE IF NOT EXISTS blog_posts (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            title TEXT, category TEXT, date TEXT, read_time TEXT, content TEXT, published INTEGER DEFAULT 1)''')
+        conn.commit()
         return conn
     except Exception as e:
-        print(f"Database error: {e}")
+        print(f"Fatal DB error: {e}")
         return None
 
 
