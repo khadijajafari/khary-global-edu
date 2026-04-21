@@ -34,12 +34,11 @@ import os
 import sqlite3
 
 def get_db():
-    # Try multiple possible paths
+    import os
     possible_paths = [
-        'applications.db',
-        '/opt/render/project/src/applications.db',
-        os.path.join(os.getcwd(), 'applications.db'),
-        '/data/applications.db'  # if you add disk
+        'applications.db',                                      # local
+        '/home/kharyglobaledu/mysite/applications.db',         # PythonAnywhere
+        os.path.join(os.getcwd(), 'applications.db')           # fallback
     ]
     
     for path in possible_paths:
@@ -48,15 +47,14 @@ def get_db():
             conn.execute('PRAGMA journal_mode=WAL')
             conn.row_factory = sqlite3.Row
             return conn
-        except Exception as e:
+        except Exception:
             continue
     
-    # If all fail, create a new database in current directory
+    # Ultimate fallback: create in current directory
     try:
         conn = sqlite3.connect('applications.db', timeout=30)
         conn.execute('PRAGMA journal_mode=WAL')
         conn.row_factory = sqlite3.Row
-        # Create tables if needed
         c = conn.cursor()
         c.execute('''CREATE TABLE IF NOT EXISTS blog_posts (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -1101,32 +1099,23 @@ def blog_search():
     return render_template('search_results.html', results=results, query=query, category=category)
 
 @app.route('/api/blog/posts')
-
 def get_blog_posts():
     conn = get_db()
     c = conn.cursor()
-    c.execute("SELECT id, title, category, date, read_time, content FROM blog_posts ORDER BY id")
-    posts = c.fetchall()
+    c.execute("SELECT id, title, category, date, read_time, content FROM blog_posts ORDER BY id DESC")
+    rows = c.fetchall()
     conn.close()
-    
-    result = []
-    for p in posts:
-        # Clean excerpt from HTML
-        import re
-        clean_text = re.sub(r'<[^>]+>', '', p[5][:200]) if p[5] else ''
-        excerpt = clean_text[:150] + '...' if clean_text else ''
-        
-        result.append({
-            'id': p[0],
-            'title': p[1],
-            'category': p[2],
-            'date': p[3],
-            'read_time': p[4],
-            'excerpt': excerpt
+    posts = []
+    for row in rows:
+        posts.append({
+            'id': row['id'],
+            'title': row['title'],
+            'category': row['category'],
+            'date': row['date'],
+            'read_time': row['read_time'],
+            'excerpt': row['content'][:150] + '...' if row['content'] else ''
         })
-    
-    return jsonify(result)
-
+    return jsonify(posts)
 
 # ==================== FILE UPLOAD CONFIGURATION ====================
 UPLOAD_FOLDER = 'uploads'
